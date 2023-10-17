@@ -1,0 +1,42 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Login{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_authentication/static/css/e-login.css' %}{% endblock %}
+
+{% block e-container %}
+
+<section class="area-login">
+    <h3>Login</h3>
+    <h5>Coloque seu E-mail e Senha para entrar</h5>
+    <form action="{% url 'login_view' %}" method="post">{% csrf_token %}
+        <div class="input">
+            <label for="email">E-mail</label><br>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+        </div>
+        <div class="input">
+            <label for="senha">Senha</label><br>
+            <input type="password" id="password" name="password" placeholder="Digite sua senha">
+        </div>
+        <input type="submit" class="submit" value="Entrar">
+    </form>
+    <br>
+    <br>
+    {% for message in messages %}
+    <div class="container-fluid p-0">
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}
+
+{% block e-scripts %}
+    <script src="{% static 'ecommerce_authentication/static/js/e-login.js' %}" type="module"></script>
+{% endblock %}

@@ -1,0 +1,70 @@
+.content .filters {
+  display: none;
+}
+
+.content .container {
+  width: 100%;
+}
+
+.area-cadastro {
+  padding: 15px;
+}
+
+.area-cadastro .top {
+}
+
+.area-cadastro .bottom form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px 0;
+}
+
+.obrigatorio {
+  display: inline;
+  color: red;
+}
+
+.area-cadastro .bottom .input {
+  width: 100%;
+}
+
+.area-cadastro .bottom .input label {
+  font-weight: 700;
+}
+
+.area-cadastro .bottom .input input,
+.area-cadastro .bottom .input select {
+  background: transparent;
+  width: 100%;
+  border-radius: 25px;
+  border: 1px solid gray;
+  padding: 0 0 0 7px;
+  height: 2rem;
+  transition: border 1s ease;
+}
+
+.area-cadastro .bottom .input input:hover,
+.area-cadastro .bottom .input select:hover {
+    border: 3px solid var(--color-5);
+}
+
+.area-cadastro .bottom .input.flex {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.submit {
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    background-color: var(--color-3);
+    color: #DDD;
+    padding: 5px;
+}
+
+@media screen and (max-width: 578px) {
+  .area-cadastro .bottom .input.flex {
+    flex-direction: column;
+  }
+}

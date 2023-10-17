@@ -1,0 +1,114 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Cadastro{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_authentication/static/css/e-cadastro.css' %}{% endblock %}
+
+{% block e-container %}
+
+<section class="area-cadastro">
+    <div class="top">
+        <h3>Cadastre-se e tenha acesso aos nossos milhares de produtos.</h3>
+    </div>
+    <div class="bottom">
+        <p>Cadastre-se</p>
+        <form action="{% url 'cadastro_user' %}" method="post">{% csrf_token %}
+            <div class="input flex">
+                <div class="input">
+                    <label for="nome">Nome</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="nome" name="first_name" placeholder="Digite seu nome">
+                </div>
+                <div class="input">
+                    <label for="sobrenome">Sobrenome</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="sobrenome" name="last_name" placeholder="Digite seu sobrenome">
+                </div>
+            </div>
+            <div class="input">
+                <label for="endereco">Endereço</label><p class="obrigatorio">*</p><br>
+                <input type="text" id="endereco" name="endereco" placeholder="Digite seu endereço">
+            </div>
+            <div class="input flex">
+                <div class="input">
+                    <label for="cep">CEP</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="cep" name="cep" data-mask="00000-000" data-mask-reverse="true" placeholder="Digite seu cep">
+                </div>
+                <div class="input">
+                    <label for="numero">Número</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="numero" name="numero" placeholder="Digite seu numero">
+                </div>
+            </div>
+            <div class="input flex">
+                <div class="input">
+                    <label for="nasc">Data de Nascimento</label><p class="obrigatorio">*</p><br>
+                    <input type="date" id="nasc" name="nasc" placeholder="Digite sua data de nascimento">
+                </div>
+                <div class="input">
+                    <label for="sexo">Sexo</label><p class="obrigatorio">*</p><br>
+                    <select name="sexo" id="sexo" name="sexo">
+                        <option value="" selected>Sexo</option>
+                        <option value="fem">Feminino</option>
+                        <option value="masc">Masculino</option>
+                        <option value="unknow">Prefiro não dizer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input flex">
+                <div class="input">
+                    <label for="telefone">Telefone</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="telefone" name="telefone" data-mask="(00) 00000-0000" data-mask-reverse="true" placeholder="Digite seu telefone">
+                </div>
+                <div class="input">
+                    <label for="documento">Documento</label><p class="obrigatorio">*</p><br>
+                    <select name="documento" id="documento" name="documento" >
+                        <option value="" selected>Selecione o documento</option>
+                        <option value="cpf">CPF</option>
+                        <option value="rg">RG</option>
+                        <option value="cnpj">CNPJ</option>
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="numero_documento">Número do Documento</label><p class="obrigatorio">*</p><br>
+                    <input type="text" id="numero_documento" name="numero_documento" placeholder="Digite o número do documento">
+                </div>
+            </div>
+            <div class="input">
+                <label for="email">E-mail</label><p class="obrigatorio">*</p><br>
+                <input type="email" id="email" name="email" placeholder="Digite seu E-mail">
+            </div>
+            <div class="input flex">
+                <div class="input">
+                    <label for="senha">Senha</label><p class="obrigatorio">*</p><br>
+                    <input type="password" id="senha" name="password" placeholder="Digite a senha">
+                </div>
+                <div class="input">
+                    <label for="conf_senha">Confirmar senha</label><p class="obrigatorio">*</p><br>
+                    <input type="password" id="conf_senha" name="conf_password" placeholder="Digite novamente a senha">
+                </div>
+            </div>
+            <input type="hidden" name="is_user" value="false">
+
+            <input type="submit" class="submit" value="Cadastrar">
+
+        </form>        
+    </div>
+</section>
+
+{% for message in messages %}
+    <div class="container-fluid p-0">
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block e-scripts %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="//assets.locaweb.com.br/locastyle/edge/javascripts/locastyle.js"></script>
+    <script src="{% static 'ecommerce_authentication/static/js/e-cadastro.js' %}" type="module"></script>
+{% endblock %}

@@ -1,0 +1,75 @@
+main {
+    overflow-y: hidden;
+}
+
+.content .filters {
+  display: none;
+}
+
+.area-login {
+    height: calc(100vh - 225px);
+}
+
+.area-login h3,
+.area-login h5 {
+  text-align: center;
+}
+
+.area-login form {
+  background-color: var(--color-1);
+  padding: 15px;
+  border-radius: 25px;
+  box-shadow: 5px 5px 9px 5px grey;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.area-login form .input {width: 60%;}
+
+.area-login form .input label {
+    color: #DDD;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.area-login form .input input {
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.area-login form .submit {
+    border: none;
+    border-radius: 25px;
+    background-color: var(--color-5);
+    color: #DDD;
+    padding: 10px 15px;
+    width: 30%;
+    transition: opacity 1s ease;
+}
+
+.area-login form .submit:hover {
+    opacity: .6;
+}
+
+@media screen and (max-width: 578px) {
+
+    .area-login {
+    overflow: hidden;
+    }
+
+    .area-login form .input {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 478px) {
+    .content .container {
+        width: 100%;
+        padding: 0;
+    }
+}

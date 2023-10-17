@@ -1,0 +1,170 @@
+{% extends 'app_whats/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_whats/static/css/chat_whatsapp.css' %}{% endblock %}
+
+{% block title %}Teste Chat{% endblock %}
+
+{% block outers %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="main">
+    <div class="left">
+        <form action="{% url 'send_whatsapp_message' %}" method="post" id="formMensagem" enctype="multipart/form-data" onsubmit="enviarMensagem(event)">{% csrf_token %}
+            <div class="chat">
+                <div class="contact bar">
+                    <div class="pic destinatario"></div>
+                    <div class="name">
+                    {{destinatario.nome_destinatario}}
+                    </div>
+                    <div class="seen">
+                    {{data_conversa}}
+                    </div>
+                </div>
+                <div class="messages" id="chat">
+                    <div class="time">
+                    {{data_conversa}}
+                    </div>
+                    {% for mensagem in msg %}
+                        {% if mensagem.tipo == 'modelo' or mensagem.tipo == 'enviada' %}
+                            {% if mensagem.conteudo %}
+                                <div class="message origem">
+                                    <p>{{mensagem.conteudo}}</p>
+                                    <span class="time_message">{{ mensagem.data_hora_message|time:"H:i" }}</span>
+                                    {% if mensagem.status_message == 'sent' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check"></i>
+                                    {% elif mensagem.status_message == 'delivered' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check-all"></i>
+                                    {% elif mensagem.status_message == 'read' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check-all azul"></i>
+                                    {% elif mensagem.status_message == 'failed' %}
+                                        <i style="color: red;" id="{{ mensagem.wa_id_message }}" class="bi bi-exclamation-triangle"></i>
+                                    {% else %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-clock"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {% if mensagem.files %}
+                            <div class="message origem">
+                                <img src="data:{{ mensagem.files.file_type }};base64,{{ mensagem.files.file_message }}" class="imagem_remetente" alt="Imagem">
+                                <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
+                                {% if mensagem.status_message == 'sent' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check"></i>
+                                    {% elif mensagem.status_message == 'delivered' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check-all"></i>
+                                    {% elif mensagem.status_message == 'read' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-check-all azul"></i>
+                                    {% elif mensagem.status_message == 'failed' %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-exclamation-triangle red"></i>
+                                    {% else %}
+                                        <i id="{{ mensagem.wa_id_message }}" class="bi bi-clock"></i>
+                                    {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if mensagem.tipo == 'recebida' %}
+                            {% if mensagem.conteudo %}
+                                <div class="message">
+                                    <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
+                                    <p>{{mensagem.conteudo}}</p>
+                                </div>
+                            {% endif %}
+                            {% if mensagem.files.files_type == 'image/jpeg' or mensagem.files.files_type == 'image/png' %}
+                            <div class="message">
+                                <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
+                                <img src="data:{{ mensagem.files.file_type }};base64,{{ mensagem.files.file_message }}" class="imagem_destinatario" alt="Imagem">
+                            </div>
+                            {% elif mensagem.files.files_type == 'audio' %}
+                            <div class="message">
+                                <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
+                                <button id="stopButton"><i class="fa-solid fa-circle-pause"></i></button>
+                                <button id="playButton"><i class="fa-solid fa-circle-play"></i></button>
+                                
+                                <audio src="" id="audioPlayer" controls></audio>
+                            </div>
+                            {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                    <button id="stopButton"><i class="fa-solid fa-circle-pause"></i></button>
+                    <button id="playButton"><i class="fa-solid fa-circle-play"></i></button>
+
+                    <!-- <div class="message digitando">
+                    <div class="typing typing-1"></div>
+                    <div class="typing typing-2"></div>
+                    <div class="typing typing-3"></div>
+                    </div> -->
+                </div>
+
+            <div class="input">
+                <span class="back"></span>
+                <div id="bolha" class="bolha"></div>
+                <i id="icon4" class="bi bi-three-dots-vertical"></i>
+
+                <label for="files" class="file-input-label">
+                    <i class="icon i_chat fas fa-paperclip"></i>
+                    <input type="file" name="files" id="files" class="file-input" style="display: none;">
+                </label>
+
+                <button id="emoji-button" class="emojis" style="text-decoration: none; background-color: transparent; border: none;">
+                    <i id="icon2" class="icon i_chat far fa-laugh-beam"></i>
+                </button>
+
+
+                <textarea class="area_texto" name="body" id="meuTextarea" rows="1" placeholder="Digite sua mensagem..." required></textarea>
+                <button id="enviarIcone" class="textarea-icon"><i id="icon5" class="fa-solid fa-paper-plane"></i></button>
+
+                <div id="thumbnail-container" name="files" class="hidden"></div>
+                <button id="start-button" class="audio" style="text-decoration: none; background-color: transparent; border: none;">
+                    <i id="icon3" style="margin-left: 3px;" class="icon i_chat fas fa-microphone"></i>
+                    <div id="recording-status"></div>
+                </button>
+                
+            </div>
+        </form>
+    </div>
+    <div class="rigth">
+        <form  action="{% url 'encerrar_atendimento' request.session.numero_usuario %}" method="post">{% csrf_token %}
+            <input hidden name="finalizar" value="True">
+            <button id="botão_finalizar" class="btn btn-info">Encerrar atendimento</button>
+        </form>
+    </div>
+
+</div>
+
+<div id="numeroUsuario" data-numero="{{ request.session.numero_usuario }}"></div>
+
+{% endblock %}
+
+{% block script %}
+<script  src="{% static 'app_whats/static/js/chat_whatsapp_HTMLconf.js' %}"></script>
+
+{% if messages %}
+  {% for message in messages %}
+    <script>
+    const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+})
+Toast.fire({
+    icon: '{{message.extra_tags|safe}}',
+    title: '{{message}}'
+})
+    </script>
+  {% endfor %}
+{% endif %}
+{% endblock %}

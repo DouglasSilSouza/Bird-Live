@@ -1,0 +1,376 @@
+.content .filters {
+    display: none;
+}
+
+.area-payment{
+  background: #eee;
+  border-radius: 25px;
+  padding: 50px;
+  margin-bottom: 25px;
+  min-height: 100vh;
+}
+
+.hidden {
+    display: none;
+}
+
+.accordion {
+    width: 100%;
+}
+
+.form_pix{
+    background: var(--primary-color-light);
+    border-radius: 5px;
+    box-shadow: 7px 7px 15px rgb(143 139 139 / 10%);
+    padding: 20px;
+    width: 100%;
+}
+
+.form_pix .inputBox{
+    margin-top: 20px;
+}
+
+.form_pix .inputBox span{
+    display: block;
+    color:#999;
+    padding-bottom: 5px;
+}
+
+.form_pix .inputBox .input,
+.form_pix .inputBox .select{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    border:1px solid rgba(0,0,0,.3);
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+    color: var(--text-color);
+    background: var(--toggle-color);
+}
+
+.form_pix .inputBox .input::placeholder,
+.form_pix .inputBox .select::placeholder{
+    color: var(--body-color);
+}
+
+.form_pix .flexbox{
+    display: flex;
+    gap:15px;
+}
+
+.form_pix .flexbox .inputBox{
+    flex:1 1 150px;
+}
+
+.submit-btn{
+    width: 100%;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    margin-top: 20px;
+    margin-bottom: 25px;
+    padding: 10px;
+    font-size: 20px;
+    color:#fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s linear;
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+}
+
+.submit-btn:hover{
+    letter-spacing: 2px;
+    opacity: .8;
+}
+
+.card-container{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -150px;
+    position: relative;
+    height: 250px;
+    width: 400px;
+}
+
+.card-container .front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0; left: 0;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    border-radius: 5px;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    padding:20px;
+    transform:perspective(1000px) rotateY(0deg);
+    transition:transform .4s ease-out;
+}
+
+.card-container .front .image{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.container .card-container .front .image img{
+    height: 50px;
+}
+
+.container .card-container .front .card-number-box{
+    padding:30px 0;
+    font-size: 22px;
+    color:#fff;
+}
+
+.container .card-container .front .flexbox{
+    display: flex;
+}
+
+.container .card-container .front .flexbox .box:nth-child(1){
+    margin-right: auto;
+}
+
+.container .card-container .front .flexbox .box{
+    font-size: 15px;
+    color:#fff;
+}
+
+.container .card-container .back{
+    position: absolute;
+    top:0; left: 0;
+    height: 100%;
+    width: 100%;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    border-radius: 5px;
+    padding: 20px 0;
+    text-align: right;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    transform:perspective(1000px) rotateY(180deg);
+    transition:transform .4s ease-out;
+}
+
+.container .card-container .back .stripe{
+    background: #000;
+    width: 100%;
+    margin: 10px 0;
+    height: 50px;
+}
+
+.container .card-container .back .box{
+    padding: 0 20px;
+}
+
+.container .card-container .back .box span{
+    color:#fff;
+    font-size: 15px;
+}
+
+.container .card-container .back .box .cvv-box{
+    height: 50px;
+    padding: 10px;
+    margin-top: 5px;
+    color:#333;
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.container .card-container .back .box img{
+    margin-top: 30px;
+    height: 30px;
+}
+
+.title-h4 {
+    color: var(--text-color);
+}
+
+.container .resume .resume-dados .title {
+    font-weight: 600;
+}
+
+.container .resume .resume-dados .value {
+    padding-left: 5px;
+}
+
+.progress-barra {
+    width: 100% !important;
+    height: 25px;
+}
+
+.remove-input-border {
+    border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.custom-icon-validation::before {
+content: "\2713" !important;
+background-color: #a5dc86;
+}
+
+.form_credit-card {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+    padding: 20px;
+}
+
+.form_credit-card .inputBox{
+    margin-top: 20px;
+}
+
+.form_credit-card .inputBox span{
+    display: block;
+    color:#999;
+    padding-bottom: 5px;
+}
+
+.form_credit-card .inputBox .input,
+.form_credit-card .inputBox .select{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    border:1px solid rgba(0,0,0,.3);
+    color:#444;
+}
+
+.form_credit-card .flexbox{
+    display: flex;
+    gap:15px;
+}
+
+.form_credit-card .flexbox .inputBox{
+    flex:1 1 150px;
+}
+
+.form_credit-card .card-container{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -150px;
+    position: relative;
+    height: 250px;
+    width: 400px;
+}
+
+.card-container .front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0; left: 0;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    border-radius: 5px;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    padding:20px;
+    transform:perspective(1000px) rotateY(0deg);
+    transition:transform .4s ease-out;
+}
+
+.card-container .front .image{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.container .card-container .front .image img{
+    height: 50px;
+}
+
+.container .card-container .front .card-number-box{
+    padding:30px 0;
+    font-size: 22px;
+    color:#fff;
+}
+
+.container .card-container .front .flexbox{
+    display: flex;
+}
+
+.container .card-container .front .flexbox .box:nth-child(1){
+    margin-right: auto;
+}
+
+.container .card-container .front .flexbox .box{
+    font-size: 15px;
+    color:#fff;
+}
+
+.container .card-container .back{
+    position: absolute;
+    top:0; left: 0;
+    height: 100%;
+    width: 100%;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    border-radius: 5px;
+    padding: 20px 0;
+    text-align: right;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    transform:perspective(1000px) rotateY(180deg);
+    transition:transform .4s ease-out;
+}
+
+.container .card-container .back .stripe{
+    background: #000;
+    width: 100%;
+    margin: 10px 0;
+    height: 50px;
+}
+
+.container .card-container .back .box{
+    padding: 0 20px;
+}
+
+.container .card-container .back .box span{
+    color:#fff;
+    font-size: 15px;
+}
+
+.container .card-container .back .box .cvv-box{
+    height: 50px;
+    padding: 10px;
+    margin-top: 5px;
+    color:#333;
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.container .card-container .back .box img{
+    margin-top: 30px;
+    height: 30px;
+}
+
+.progress-barra {
+    width: 100% !important;
+    height: 25px;
+}
+
+@media screen and (max-width: 451px) {
+    .content {
+        padding: 0;
+    }
+    .container {
+        background-color: transparent;
+        padding: 0;
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+
+    .container .left {
+        min-width: 100%;
+        padding: 15px 30px;
+    }
+
+    .title {
+        margin: 30px 15px;
+    }
+
+    form .flexbox {
+        flex-wrap: wrap;
+        gap: 0 15px;
+    }
+    
+}

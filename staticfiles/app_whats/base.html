@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'app_whats/static/css/base.css' %}">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+    {% block outers %}
+    {% endblock %}
+    
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus'></i>
+      <span class="logo_name">CodingLab</span>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a href="{% url 'home' %}">
+          <i class='bx bx-home-alt'></i>
+          <span class="link_name">Home</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'home' %}">Home</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="{% url 'iniciar_chat' %}">
+            <i class='bx bx-chat'></i>
+            <span class="link_name">Chat</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="{% url 'iniciar_chat' %}">Chat</a></li>
+          <li><a href="{% url 'iniciar_chat' %}">Enviar Mensagem</a></li>
+          <li><a href="{% url 'conversas_whatsapp' %}">Históricos</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Category</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-collection' ></i>
+            <span class="link_name">Category</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Category</a></li>
+          <li><a href="#">HTML & CSS</a></li>
+          <li><a href="#">JavaScript</a></li>
+          <li><a href="#">PHP & MySQL</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt' ></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Posts</a></li>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Login Form</a></li>
+          <li><a href="#">Card Design</a></li>
+        </ul>
+      </li>
+            
+      <li>
+        <a href="{% url 'configuracoes' %}">
+          <i class='bx bx-cog' ></i>
+          <span class="link_name">Configurações</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'configuracoes' %}">Configurações</a></li>
+        </ul>
+      </li>
+      {% if not request.user.is_authenticated %}
+      <li>
+        <a href="{% url 'login_view' %}">
+          <i class='bx bx-log-in icon'></i>
+          <span class="link_name">Login</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'login_view' %}">Login</a></li>
+        </ul>
+      </li>
+      <li>
+        
+      <li>
+        <a href="{% url 'cadastro' %}">
+          <i class='bx bx-door-open icon'></i>
+          <span class="link_name">Cadastrar</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'cadastro' %}">Cadastrar</a></li>
+        </ul>
+      </li>
+      <li>
+      {% endif %}
+
+      <div class="fixed">
+        <li class="mode">
+          <a class="sun-moon">
+              <i class='bx bx-moon icon moon'></i>
+              <i class='bx bx-sun icon sun'></i>
+              <span class="toggle-switch">
+                <span class="switch"></span>
+              </span>
+            </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name mode-text" href="#">Dark mode</a></li>
+          </ul>
+        </li>
+          
+        <li>
+          <div class="profile-details">
+            <div class="profile-content">
+                <img src="https://w7.pngwing.com/pngs/222/641/png-transparent-computer-icons-temperature-miscellaneous-photography-presentation.png" alt="profileImg">
+            </div>
+            <div class="name-job">
+                <div class="profile_name">{{ request.user.first_name }}</div>
+                <div class="job">{{ request.user.last_name }}</div>
+            </div>
+            {% if request.user.is_authenticated %}
+            <i class='bx bx-log-out'></i>
+            {% endif %}
+          </div>
+        </li>
+    </div>
+    </ul>
+  </div>   
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+    </div>
+    <div class="content">
+      {% block body %}{% endblock %}
+    </div>
+  </section>
+  <script>
+    const body = document.querySelector('body'),
+    toggle = body.querySelector(".toggle"),
+      modeSwitch = body.querySelector(".toggle-switch"),
+      modeText = body.querySelector(".mode-text");
+
+  let arrow = document.querySelectorAll(".arrow");
+  for (var i = 0; i < arrow.length; i++) {
+    arrow[i].addEventListener("click", (e)=>{
+   let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+   arrowParent.classList.toggle("showMenu");
+    });
+  }
+  let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".bx-menu");
+  console.log(sidebarBtn);
+  sidebarBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("close");
+  });
+
+  modeSwitch.addEventListener("click" , () =>{
+    body.classList.toggle("dark");
+    
+    if(body.classList.contains("dark")){
+        modeText.innerText = "Light mode";
+    }else{
+        modeText.innerText = "Dark mode";
+        
+    }
+});
+
+  </script>
+</body>
+
+<script src="{% static 'app_whats/static/js/base.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% block script %}{% endblock %}
+</html>

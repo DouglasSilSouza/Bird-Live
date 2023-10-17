@@ -1,0 +1,41 @@
+{% extends 'app_whats/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_whats/static/css/conversas.css' %}{% endblock %}
+
+{% block title %}Conversas - Histórico{% endblock %}
+
+{% block outers %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div >
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Número</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conversa in conversas %}
+                <tr class="separator">
+                    <td>{{conversa.destinatario.nome_destinatario}}</td>
+                    <td>{{conversa.status_room}}</td>
+                    <td class="telefone">{{conversa.destinatario.numero_telefone}}</td>
+                    <td><a href="{% url 'historico' conversa.id  %}"><input type="button" class="btn btn-info" value="Histórico"></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'app_whats/static/js/conversas.js' %}"></script>
+{% endblock %}

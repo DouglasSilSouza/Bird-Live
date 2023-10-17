@@ -1,0 +1,48 @@
+article{
+    color: var(--text-color);
+    margin-bottom: 30px;
+}
+
+#produtos {display: flex;}
+
+.livros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.livro {
+    gap: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex: 3 2 100px;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.livro_img {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.book-img {
+    width: 9rem;
+}
+
+.title-book {
+    color: var(--text-color);
+    margin: 10px 20px !important;
+    text-align: center;
+}
+
+.description {
+    color: var(--text-color);
+    margin: 10px 20px;
+    font-size: 10px;
+}
+
+.buy {
+    width: 100%;
+}

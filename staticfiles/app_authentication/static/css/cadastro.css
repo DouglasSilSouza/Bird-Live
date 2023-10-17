@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --main-bg-color: #FF00BE;
+    --main-bg-color-shadow: #6c0051;
+    --main-bg-color-hover: #52003d;
+    --main-bg-color-hover-shadow: #6c0051;
+
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #B30000;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+}
+
+.main_login.dark{
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+}
+
+.main_login {
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    /* border-radius: 20px;
+    box-shadow: 0 10px 40px #00000056; */
+}
+
+.left_login {
+    width: 45vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.left_login > h1 {
+    margin: 10% 20% 0 0;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-align: right;
+}
+
+.left_login > img {
+    width: 50%;
+}
+
+.rigth_login {
+    width: 50%;
+}
+
+.card_login {
+    width: 100%;
+    padding: 15px 20px;
+    background: #2f2841;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px #00000056;
+}
+
+.card_login > form h1 {
+    color: var(--text-color) !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.textfield {
+    width: 48%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.textfield > input {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    background: #514869;
+    color: #f0ffffde;
+    font-size: 12pt;
+    box-shadow: 0 10px 40px #00000056;
+    outline:none;
+    box-sizing: border-box;
+    border-bottom: none;
+    transition: 0,5ms;
+}
+
+.textfield > input:hover {
+    border-bottom: 3px solid var(--main-bg-color);
+}
+
+.textfield > input::placeholder {
+    color: #f0ffff94;
+}
+
+.meio {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.inteiro {
+    width: 100%;
+}
+
+.textfield > label {
+    color: aliceblue;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.btn_login {
+    width: 60%;
+    padding: 16px 0;
+    margin: 25px;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #2b134b;
+    background: var(--main-bg-color);
+    box-shadow: 0 10px 40px -12px var(--main-bg-color-shadow);
+}
+
+.btn_login:hover {
+    background-color: var(--main-bg-color-hover);
+    box-shadow: 0 10px 40px -12px var(--main-bg-color-hover-shadow);
+    color: aliceblue;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.msg_erro {
+    width: 100%;
+    color: brown;
+    text-align: center;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+p > strong > i {
+    margin-right: 5px;
+}
+
+@media screen and (max-width: 415px ) {
+    .main_login {
+        flex-direction: column;
+        width: 100%;
+        min-height: 50rem;
+        padding: 4% 3%;
+    }
+
+    .rigth_login {
+        width: 100%;
+    }
+
+    .card_login {
+        width: 100%;
+        margin-top: 5%;
+    }
+
+    .left_login > img {
+        position: static;
+        width: 100%;
+    }
+
+    .textfield {
+        width: 100%;
+    }
+
+    .meio {
+        flex-direction: column;
+    }
+    
+
+}
+
+@media screen and (min-width: 416px) and (max-width: 600px ) {
+    .main_login {
+        flex-direction: column;
+        width: 100%;
+        min-height: 65rem;
+        padding: 4% 3%;
+    }
+
+    .left_login {
+        margin-top: 5%;
+    }
+    
+    .left_login > h1 {
+        position: static;
+    }
+    
+    .left_login > img {
+        position: static;
+        width: 100%;
+    }
+
+    .rigth_login {
+        width: 100%;
+    }
+
+    .textfield {
+        width: 100%;
+    }
+
+    .meio {
+        flex-direction: column;
+    }
+    
+}
+
+@media screen and (min-width: 601px) and (max-width: 1000px ) {
+    .main_login {
+        width: 100%;
+        min-height: 90rem;
+        flex-direction: column;
+        align-items: center;
+        padding: 4% 3%;
+    }
+
+    .rigth_login {
+    width: 100%;
+    }
+
+    .left_login {
+        margin-top: 5%;
+    }
+        
+    .left_login > img {
+        width: 100%;
+    }
+
+    .card_login {
+        width: 100%;
+    }
+}

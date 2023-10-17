@@ -1,0 +1,22 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_whats/static/css/index.css' %}{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+{% block body %}
+
+<h1>Bem-vindo ao DLS Empresas</h1>
+
+{% endblock %}

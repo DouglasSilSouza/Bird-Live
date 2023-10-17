@@ -1,0 +1,110 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block css %}{% static 'app_whats/static/css/configuracoes.css' %}{% endblock %}
+
+{% block title %}Configurações{% endblock %}
+
+{% block outers %}
+
+<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
+<script src="assets/js/scripts.bundle.js"></script>
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="cards">
+    <form action="#" method="post">
+        <div class="meio">
+            <div class="textfield">
+                <label for="name" class="form-label">Nome: </label><br>
+                <input type="text" class="form-control" placeholder="Nome" value="{{request.user.first_name}}">
+            </div>
+
+            <div class="textfield">
+                <label for="name" class="form-label">Sobrenome: </label><br>
+                <input type="text" class="form-control" placeholder="Sobrenome" value="{{request.user.last_name}}">
+            </div>
+        </div>
+        <div class="textfield inteiro">
+            <label for="name" class="form-label">E-mail: </label><br>
+            <input type="email" class="form-control" placeholder="E-mail" value="{{request.user.email}}">
+        </div>
+
+        <br>
+        <br>
+
+        <h3>Senhas: </h3>
+        <div class="meio">
+            <div class="textfield">
+                {% if form_senha.new_password1.errors %}
+                <span class="error_info">{% render_field form_senha.new_password1.errors %}</span>
+                {% endif %}
+                <label for="id_new_password1" class="form-label">Senha: </label>
+                {% render_field form_senha.new_password1 placeholder="Digite nova senha" %}  
+            </div>
+
+            <div class="textfield">
+                <span class="error_info">{% render_field form_senha.new_password2.errors %}</span>
+                <label for="id_new_password2" class="form-label">Confirmar senha: </label>
+                {% render_field form_senha.new_password2 placeholder="Digite novamente a nova senha" data-equal="id_new_password1" %}  
+            </div>
+        </div><br>
+            <div class="error_info">{% render_field form_senha.new_password1.help_text %}</div>
+            
+        <div class="msg">
+            {% if messages %}
+            {% for message in messages %}
+
+            <div class="alert {{ message.tags}} d-flex align-items-center alert-dismissible fade show" role="alert">
+            <div>
+                {{message}}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    </form>
+    <br>
+    <br>
+    <h3>Alterar Foto de Perfil:</h3>
+    <div>
+        <form action="#" method="post" enctype="multipart/form-data">
+            <label for="images" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Drop files here</span>
+                or
+                <input type="file" id="images" accept="image/*" required>
+            </label>
+        </form>
+    </div>
+    <br><br>
+</div>
+
+<script>
+      const dropContainer = document.getElementById("dropcontainer")
+  const fileInput = document.getElementById("images")
+
+  dropContainer.addEventListener("dragover", (e) => {
+    // prevent default to allow drop
+    e.preventDefault()
+  }, false)
+
+  dropContainer.addEventListener("dragenter", () => {
+    dropContainer.classList.add("drag-active")
+  })
+
+  dropContainer.addEventListener("dragleave", () => {
+    dropContainer.classList.remove("drag-active")
+  })
+
+  dropContainer.addEventListener("drop", (e) => {
+    e.preventDefault()
+    dropContainer.classList.remove("drag-active")
+    fileInput.files = e.dataTransfer.files
+  })
+</script>
+{% endblock %}

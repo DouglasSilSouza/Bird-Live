@@ -1,0 +1,136 @@
+:root{
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #ccb7b7;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+    --hover-color: #d5e9ff;
+    --selected-color: #afc8e2;
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+}
+
+.body.dark{
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+    --hover-color: #66b0ff;
+    --selected-color: #007bff;
+}
+
+.main {
+    width: 98%;
+    background-color: var(--sidebar-color);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px #00000056;
+}
+
+.form-label {
+    color: var(--text-color);
+}
+
+.entrada {
+    width: 48%;
+}
+
+.input {
+    display: flex;
+    justify-content: space-between;
+}
+
+input {
+    background-color: var(--primary-color-light) !important;
+    color: var(--text-color) !important;
+}
+
+select{
+    background-color: var(--primary-color-light) !important;
+    color: var(--text-color) !important;
+}
+
+.alert {
+    margin: auto;
+    max-width: 40%;
+}
+
+.title_h5 {
+    color: var(--text-color);
+    display: block;
+}
+
+.canais {
+    display: flex;
+    flex-direction: row;
+}
+/* Estilize os botões de seleção aqui */
+input[type="radio"] {
+    display: none; /* Esconde os inputs radio */
+}
+
+.radio-label {
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    margin-right: 15px;
+    background-color: var(--primary-color-light);
+    color: var(--text-color);
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.radio-label > span > i {
+    font-size: 25px;
+    margin-left: 5px;
+    color: var(--text-color);
+}
+
+.radio-label:hover {
+    background-color: var(--hover-color);
+}
+
+/* Estilo para o botão selecionado */
+input[type="radio"]:checked + .radio-label {
+    background-color: var(--selected-color);
+    color: var(--text-color);
+    border-color: var(--selected-color);
+}
+
+@media screen and (max-width: 600px) {
+    .input {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .entrada {
+        width: 100%;
+    }
+
+    .alert {
+        max-width: 100%;
+    }
+
+    .canais {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 740px) {
+
+    .alert {
+        max-width: 100%;
+    }
+
+}

@@ -1,0 +1,74 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_authentication/static/css/cadastro.css' %}{% endblock %}
+
+{% block title %}Cadastrar{% endblock %}
+
+{% block outers %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block body %}
+
+<div class="main_login">
+    <div class="rigth_login">
+        <div class="card_login">
+            <form action="{% url 'cadastro_collaborator' %}" method="post" id="form">{% csrf_token %}
+                <h1>Cadastre-se</h1>
+                <div class="meio">
+                    <div class="textfield">
+                        <label for="nome">Nome</label>
+                        <input type="text" name="first_name" id="nome" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="sobrenome">Sobrenome</label>
+                        <input type="text" name="last_name" id="sobrenome" placeholder="Digite seu sobrenome" required>
+                    </div>
+                </div>
+
+                <div class="textfield inteiro">
+                    <label for="email">E-mail</label>
+                    <input type="email" name="email" id="email" placeholder="Digite seu e-mail" required>
+                </div>
+
+                <div class="meio">
+                    <div class="textfield">
+                        <label for="senha">Senha</label>
+                        <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="conf_password">Repita a senha</label>
+                        <input type="password" name="conf_password" id="conf_password" placeholder="Digite sua senha" required>
+                    </div>
+                </div>
+                <div id="emailHelp" style="color: aliceblue; text-align: center;" class="form-text">Senha deve conter uma letra maiúscula, minúscula e caracte especial.</div>
+
+                <p style="display: none;" class="warning msg_erro" id="warning"></p>
+                {% if messages %}
+                    {% for message in messages %}
+                        <p style="display: none;" class="warning msg_erro" id="warning"><strong><i class="bi bi-exclamation-circle-fill"></i>{{message}}</strong></p>
+                    {% endfor %}
+                {% endif %}
+
+                <input type="hidden" name="is_user" value="true">
+
+                <div class="button">
+                    <input type="submit" value="Entrar" class="btn_login">
+                </div>
+            </form>
+        </div>
+    </div>
+
+  <div class="left_login">
+    <h1>Cadastre-se e faça parte do nosso time</h1>
+    <img src="{% static 'app_authentication/static/img/computer.png' %}" alt="Login">
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'app_authentication/static/js/cadastro.js' %}"></script>
+{% endblock %}

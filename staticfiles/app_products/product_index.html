@@ -1,0 +1,27 @@
+{% extends 'app_whats/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_products/static/css/product_index.css' %}{% endblock %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block outers %}
+{% endblock %}
+
+{% block body %}
+
+<section>
+    <article>
+        <h3>Melhores produtos</h3>
+        nossos produtos abaixo, confira:
+    </article>
+</section>
+<section>
+    <article>
+        <div>
+            <img src="{% static 'app_products/static/img/livro-1.png' %}" alt="livro-1">
+        </div>
+    </article>
+</section>
+
+{% endblock %}

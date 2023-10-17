@@ -1,0 +1,36 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_products/static/css/product_index.css' %}{% endblock %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block outers %}
+{% endblock %}
+
+{% block body %}
+
+<section>
+    <article>
+        <h3>Melhores produtos</h3>
+        nossos produtos abaixo, confira:
+    </article>
+</section>
+<section>
+    <section id="produtos">
+        <div class="livros">
+            {% for book in books %}
+                <div class="livro">
+                    <figure class="livro_img">
+                        <img src="{{book.imagem.url}}" alt="{{book.title}}" class="book-img">
+                    </figure>
+                    <h5 class="title-book">{{book.title}}</h5>
+                    <p class="description">{{book.description}}</p>
+                    <a href="{% url 'product_only' book.title_slug %}"><button class="buy btn btn-success">R$ {{book.valor}}</button></a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</section>
+
+{% endblock %}

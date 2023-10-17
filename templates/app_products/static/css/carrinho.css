@@ -1,0 +1,205 @@
+.container {
+  height: 100vh;
+  display: flex;
+  gap: 15px;
+  flex: 3 1 100px;
+  background-color: var(--sidebar-color);
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.container .left {
+  width: 50%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-flow: column;
+  background-color: var(--primary-color-light);
+  padding: 10px 30px 5px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container .left .resume {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.container .left .resume .resumecontainer {
+  display: flex;
+  gap: 15px;
+  background-color: #dcdcdc8f;
+  border-radius: 30px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 7px 5px 15px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+}
+
+.container .left .label {
+    margin-right: 5px;
+    display: inline;
+}
+
+.container .left .empty {
+  margin: auto;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.container .left .resume .resume-dados {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.container .left .resume .dados {
+  display: flex;
+  flex-direction: row;
+}
+
+.container .left .resume .dados .qtd {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.container .left .resume .dados .qtd .plus,
+.container .left .resume .dados .qtd .dash {
+    font-size: 0.6rem;
+}
+
+.container .left .resume .book-img {
+  max-width: 5rem;
+}
+
+.container .left .resume-total {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--text-color);
+  gap: 5px;
+  margin: 15px 0;
+}
+
+.container .left .resume-total .total,
+.container .left .resume-total .title {
+    color: var(--text-color);
+}
+
+.container .right {
+    width: 50%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-flow: column;
+    background-color: var(--primary-color-light);
+    padding: 20px 25px 10px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container .right .paymentcontainer {
+    height: 100%;
+    width: 100%;
+    margin-top: 15px;
+    overflow: auto;
+}
+
+/* Defina uma transição suave na altura dos detalhes */
+.container .right .paymentcontainer .accordion {
+    --bs-accordion-bg: var(--sidebar-color);
+    --bs-accordion-border-color: var(--primary-color-light);
+    --bs-accordion-btn-icon-color: var(--text-color);
+}
+
+.container .right .paymentcontainer .accordion .accordion-button,
+.container .right .paymentcontainer .accordion .accordion-item {
+    color: var(--text-color) !important;
+    border-radius: 15px;
+}
+
+.container .right .paymentcontainer .accordion .accordion-button:not(.collapsed) {
+    background-color: var(--toggle-color);
+}
+
+.container .rigth form{
+    background: var(--primary-color-light);
+    border-radius: 5px;
+    box-shadow: 7px 7px 15px rgb(143 139 139 / 10%);
+    padding: 20px;
+    width: 100%;
+}
+
+.container .right .paymentcontainer .accordion form .inputBox{
+    margin-top: 20px;
+}
+
+.container .right .paymentcontainer .accordion form .inputBox span{
+    display: block;
+    color:#999;
+    padding-bottom: 5px;
+}
+
+.container .right .paymentcontainer .accordion .inputBox .input,
+.container .right .paymentcontainer .accordion .inputBox .select{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    border:1px solid rgba(0,0,0,.3);
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+    color: var(--text-color);
+    background: var(--toggle-color);
+}
+
+.container .right .paymentcontainer .accordion form .inputBox .input::placeholder,
+.container .right .paymentcontainer .accordion form .inputBox .select::placeholder{
+    color: var(--body-color);
+}
+
+.container .right .paymentcontainer .accordion form .flexbox{
+    display: flex;
+    gap:15px;
+    align-items: flex-end;
+}
+
+.container .right .paymentcontainer .accordion form .flexbox .inputBox{
+    flex:1 1 150px;
+}
+
+.container .right .paymentcontainer .accordion form .submit-btn{
+    width: 100%;
+    background:linear-gradient(45deg, blueviolet, deeppink);
+    margin-top: 20px;
+    margin-bottom: 25px;
+    padding: 10px;
+    font-size: 20px;
+    color:#fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s linear;
+    box-shadow: 0 10px 15px rgba(0,0,0,.1);
+}
+
+.container .right .paymentcontainer .accordion form .submit-btn:hover{
+    letter-spacing: 2px;
+    opacity: .8;
+}
+
+
+
+
+

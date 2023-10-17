@@ -1,0 +1,135 @@
+:root{
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #B30000;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+
+    /* WhatsApp Body */
+    
+    --body-whatsapp-sent: #dcf8c6;
+    --body-whatsapp-receveid: #EDF8F5;
+    --body-whatsapp-color: #ece5dd;
+    --color-text-whatsapp: #000;
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+}
+
+::selection{
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+body.dark{
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+    --body-whatsapp-color: #575451;
+    --color-text-whatsapp: #fff;
+
+    /* WhatsApp Body */
+
+    --body-whatsapp-sent: #075E54;
+    --body-whatsapp-receveid:#25302e;
+}
+
+.janela{
+    width: 50%;
+    overflow-x: hidden;
+    margin: auto;
+}
+
+.information{
+    padding: 15px;
+    background-color: var(--body-whatsapp-sent);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 25px 25px 0 0;
+    align-items: center;
+}
+
+p {
+    margin: 0 !important;
+}
+
+.information .pessoais{
+    width: 60%;
+}
+
+.information .pessoais .nome{
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.information .pessoais .telefone{
+    color: var(--text-color);
+}
+
+.information .datetime {
+    color: var(--text-color);
+}
+
+.body_chat{
+    width: 100%;
+    border-radius: 0 0 25px 25px;
+    background-color: var(--body-whatsapp-color);
+}
+
+.body_chat .messages{
+    padding: 1rem;
+    min-width: 49%;
+    height: 65vh;
+    border-radius: 0 0 25px 25px;
+    flex-shrink: 2;
+    overflow-y: auto;
+    box-shadow: inset 0 2rem 2rem -2rem rgba(0, 0, 0, 0.05), inset 0 -2rem 2rem -2rem rgba(0, 0, 0, 0.05);
+}
+
+.body_chat .messages .message {
+    display: flex;
+    box-sizing: border-box;
+    padding: 0.5rem 1rem 0.3rem 0.3rem;
+    margin: 1rem;
+    background-color: var(--body-whatsapp-receveid);
+    color: var(--color-text-whatsapp);
+    border-radius: 1.125rem 1.125rem 1.125rem 0;
+    min-height: 2.25rem;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 66%;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
+}
+
+.body_chat .messages .message.origem {
+    padding: 0.5rem 0.3rem 0.5rem 1rem;
+    display: flex;
+    margin: 1rem 1rem 1rem auto;
+    background-color: var(--body-whatsapp-sent) !important;
+    border-radius: 1.125rem 1.125rem 0 1.125rem;
+    background: #333;
+    color: var(--color-text-whatsapp) !important;
+}
+
+.body_chat .messages .message.origem p {  
+    padding: 0 5px 0 0;
+}
+
+.body_chat .messages .message p {
+    padding: 0 0 0 5px;
+}
+
+.time_message{
+    color: var(--text-color);
+    font-size: 0.65rem;
+    margin: 12px 0 0 0;
+}

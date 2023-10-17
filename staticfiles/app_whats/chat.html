@@ -1,0 +1,28 @@
+{% extends 'app_whats/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_whats/static/css/chat.css' %}{% endblock %}
+
+{% block title %}Conversas{% endblock %}
+
+{% block outers %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="cards">
+    <div class=" card_son historico">
+        <a href="{% url 'conversas_whatsapp' %}">
+            <h3>Histórico</h3>
+            <p>Visualize o histórico de conversas!</p>
+        </a>
+    </div>
+    <div class=" card_son get_numero">
+        <a href="{% url 'numero_whatsapp' %}">
+        <h3>Enviar Mensagem</h3>
+        <p>Envie mensagens para os clientes.</p></a>
+    </div>
+</div>
+
+{% endblock %}

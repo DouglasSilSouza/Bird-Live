@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{% static 'ecommerce_main/static/img/0.75x/Library.png' %}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{% static 'ecommerce_main/static/css/e-base.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <title>{% block e-title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% block e-css %}{% endblock %}">
+
+    {% block e-outers %}{% endblock %}
+</head>
+<body>
+    <main>
+        <section>
+            <nav class="navbar">
+                <figure>
+                    <a href="{% url 'e-home' %}">
+                        <img src="{% static 'ecommerce_main/static/img/SVG/LibrarySem título-1.svg' %}/" alt="library">
+                    </a>
+                </figure>
+                <div class="navbar_toggle">
+                    <i class="bi bi-list"></i>
+                </div>
+                <div class="links close">
+                    <a href="{% url 'e-home' %}">Inicio</a>
+                    <a href="#">Sobre nós</a>
+                    <a href="#">Contato</a>
+                    
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'login_view' %}" class="buttom signin">Entrar</a>
+                    <a href="{% url 'cadastro_user' %}" class="buttom register">Registrar</a>
+                    {% else %}
+                    <a href="{% url 'cart' %}" class="position-relative" id="badges"><span class="material-symbols-outlined">shopping_cart</span></a>
+                    <a href="{% url 'logout_view' %}" class="buttom signout">Sair</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </section>
+        <section class="content">
+            <aside class="filters">
+                <div class="tags">
+                    <h3>valores</h3>
+                    <span>Menos de R$ 100,00</span>
+                    <span>Mais de R$ 100,00</span>
+                </div>
+            </aside>
+            <section class="container">
+                {% block e-container %}{% endblock %}
+            </section>
+        </section>
+    </main>
+    <footer>
+        <p>2023 &copy; Bibliotecando</p>
+        <p>Gerenciado por DLS Empresa</p>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'ecommerce_main/static/js/e-base.js' %}"></script>
+    {% block e-scripts %}{% endblock %}
+</body>
+</html>

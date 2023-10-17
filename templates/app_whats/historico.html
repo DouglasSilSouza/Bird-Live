@@ -1,0 +1,51 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_whats/static/css/historico.css' %}{% endblock %}
+
+{% block title %}Teste Chat{% endblock %}
+
+{% block outers %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="janela">
+        <div class="information">
+            <div class="pessoais">
+                {% if conversa.destinatario.nome_destinatario in None %}
+                    <p>-Sem Nome-</p>
+                {% else %}
+                    <p class="nome">{{conversa.destinatario.nome_destinatario}}</p>
+                {% endif %}
+                <p class="telefone">{{conversa.destinatario.numero_telefone}}</p>
+            </div>
+            <div class="datetime">
+                <p>{{conversa.data_conversa|date:"D, d M Y"}}</p>
+            </div>                      
+        </div>
+        <div class="body_chat">
+            <div class="messages">
+                {% for mensagem in mensagens %}
+                    {% if mensagem.tipo == 'modelo' or mensagem.tipo == 'enviada' %}
+                        <div class="message origem">
+                            <p>{{mensagem.conteudo}}</p>
+                            <span class="time_message">{{mensagem.data_envio|time:"H:i"}}</span>
+                        </div>
+                    {% endif %}
+                    {% if mensagem.tipo == 'recebida' %}
+                        <div class="message">
+                            <span class="time_message">{{mensagem.data_envio|time:"H:i"}}</span>
+                            <p>{{mensagem.conteudo}}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'app_whats/static/js/historico.js' %}"></script>
+{% endblock %}

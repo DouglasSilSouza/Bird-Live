@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'app_main/static/css/base.css' %}">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+    {% block outers %}
+    {% endblock %}
+    
+    <title>{% block title %}{% endblock %}</title>
+    {% if not request.user.is_authenticated %}
+    <style>
+      .fixed {
+        position: static;
+      }
+
+    </style>
+    {% endif %}
+</head>
+<body>
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus'></i>
+      <span class="logo_name">CodingLab</span>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a href="{% url 'home' %}">
+          <i class='bx bx-home-alt'></i>
+          <span class="link_name">Home</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'home' %}">Home</a></li>
+        </ul>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li>
+        <div class="iocn-link">
+          <a href="{% url 'iniciar_chat' %}">
+            <i class='bx bx-chat'></i>
+            <span class="link_name">Chat</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="{% url 'iniciar_chat' %}">Chat</a></li>
+          <li><a href="{% url 'iniciar_chat' %}">Enviar Mensagem</a></li>
+          <li><a href="{% url 'conversas_whatsapp' %}">Históricos</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="{% url 'e-home' %}">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="link_name">produtos</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'e-home' %}">produtos</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-collection' ></i>
+            <span class="link_name">Category</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Category</a></li>
+          <li><a href="#">HTML & CSS</a></li>
+          <li><a href="#">JavaScript</a></li>
+          <li><a href="#">PHP & MySQL</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="{% url 'cart' %}">
+          <i class='bx bx-cart' ></i>
+          <span class="link_name">Carrinho</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'cart' %}">Carrinho</a></li>
+        </ul>
+      </li>        
+      <li>
+        <a href="{% url 'configuracoes' %}">
+          <i class='bx bx-cog' ></i>
+          <span class="link_name">Configurações</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'configuracoes' %}">Configurações</a></li>
+        </ul>
+      </li>
+      {% else %}
+      <li>
+        <a href="{% url 'login_view' %}">
+          <i class='bx bx-log-in icon'></i>
+          <span class="link_name">Login</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'login_view' %}">Login</a></li>
+        </ul>
+      </li>
+      
+      <li>
+        <a href="{% url 'cadastro_collaborator' %}">
+          <i class='bx bx-door-open icon'></i>
+          <span class="link_name">Cadastrar</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="{% url 'cadastro_collaborator' %}">Cadastrar</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      <div class="fixed">
+        <li class="mode">
+          <a class="sun-moon">
+            <i class='bx bx-moon icon moon'></i>
+            <i class='bx bx-sun icon sun'></i>
+            <span class="toggle-switch">
+              <span class="switch"></span>
+            </span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name mode-text" href="#">Dark mode</a></li>
+          </ul>
+        </li>
+          
+        {% if request.user.is_authenticated %}
+        <li>
+          <div class="profile-details">
+            <div class="profile-content">
+                <img src="https://w7.pngwing.com/pngs/222/641/png-transparent-computer-icons-temperature-miscellaneous-photography-presentation.png" alt="profileImg">
+            </div>
+            <div class="name-job">
+                <div class="profile_name">{{ request.user.first_name }}</div>
+                <div class="job">{{ request.user.last_name }}</div>
+            </div>
+            <a href="{% url 'logout_view' %}"><i class='bx bx-log-out'></i></a>
+          </div>
+        </li>
+        {% endif %}
+    </div>
+    </ul>
+  </div>   
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+    </div>
+    <main class="content">
+      {% block body %}{% endblock %}
+    </main>
+    <footer>
+      <p class="rodape">2023 &copy; DLS Empresa</p>
+    </footer>
+  </section>
+</body>
+
+<script src="{% static 'app_main/static/js/base.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% block script %}{% endblock %}
+</html>

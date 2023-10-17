@@ -1,0 +1,23 @@
+.content .filters {
+    display: none;
+}
+.pg_concluido {
+    height: 65vh;
+}
+
+section h2 {
+    color: green;
+}
+
+.table-img {
+    max-width: 4rem;
+    max-height: 4rem;
+    margin: auto;
+}
+
+.total {
+    border-top: 1px solid grey;
+    padding-top: 5px;
+    text-align: end;
+    font-size: 1.5rem;
+}
