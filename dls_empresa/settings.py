@@ -22,15 +22,13 @@ DEBUG = True
 
 host = 'bird-live-ewe.ngrok-free.app'
 
-ALLOWED_HOSTS = [host, 'localhost']
+ALLOWED_HOSTS = [host, 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
-    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,9 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'app_authentication',
-    'app_chat_interno',
     'app_payment',
-    'app_whats',
     'ecommerce_cart',
     'ecommerce_main',
 ]
@@ -174,3 +170,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'app_authentication.Cadastro'
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'douglassilvadesouza2@gmail.com' # conta gmail remetente
+EMAIL_HOST_PASSWORD = 'zzkf tsxg hfpz mtja'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587

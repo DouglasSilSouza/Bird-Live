@@ -44,6 +44,7 @@
                     <a href="{% url 'cadastro_user' %}" class="buttom register">Registrar</a>
                     {% else %}
                     <a href="{% url 'cart' %}" class="position-relative" id="badges"><span class="material-symbols-outlined">shopping_cart</span></a>
+                    <a href="{% url 'dados_pessoais' %}"><span class="bi bi-person"></span></a>
                     <a href="{% url 'logout_view' %}" class="buttom signout">Sair</a>
                     {% endif %}
                 </div>

@@ -17,14 +17,17 @@
   font-family: "Quicksand", "Poppins", sans-serif;
 }
 
-html,
 body {
-  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-content: stretch;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 main {
   background-color: #fcfcfc;
-  height: 100%;
+  width: 100%;
 }
 
 nav {
@@ -44,9 +47,9 @@ nav figure img {
 nav .links {
   display: flex;
   height: 100%;
-  align-items: center;
   gap: 15px;
   margin: 0 15px;
+  align-items: center;
 }
 
 nav .links a {
@@ -55,7 +58,8 @@ nav .links a {
   font-weight: 500;
   cursor: pointer;
   color: #ddd;
-  position: relative; /* Adicione position:relative para usar position:absolute no ::after */
+   /* Adicione position:relative para usar position:absolute no ::after */
+  position: relative;
 }
 
 nav .links a::after {
@@ -73,6 +77,10 @@ nav .links a::after {
 
 nav .links a:hover::after {
   width: 100%; /* Defina a largura desejada para preencher o link */
+}
+
+nav .links a .bi-person{
+  font-size: 1.5rem;
 }
 
 nav .links .buttom {
@@ -143,13 +151,12 @@ footer {
   justify-content: center;
   align-items: center;
   margin-top: 15px;
-  padding: 15px;
+  padding: 15px 0 0 0;
   flex-direction: column;
   gap: 5px;
   background-color: var(--color-2);
   color: var(--subtitle);
   width: 100%;
-  position: absolute;
 }
 
 @media screen and (max-width: 827px) {
@@ -175,6 +182,10 @@ footer {
 }
 
 @media screen and (max-width: 578px) {
+  .content .container {
+    width: 100%;
+  }
+
   main {
     overflow-x: hidden;
   }
@@ -184,7 +195,8 @@ footer {
   }
 
   nav {
-    height: 65px;
+    
+height: 65px;
   }
 
   nav figure {

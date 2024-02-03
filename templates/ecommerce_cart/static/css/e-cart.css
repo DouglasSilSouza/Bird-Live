@@ -15,6 +15,7 @@
   border: none;
   border-radius: 5px;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 
 .resume .resumecontainer {
@@ -182,3 +183,50 @@
   opacity: .7;
 }
 
+@media screen and (max-width: 822px) {
+
+  .resume .resumecontainer{
+    position: relative
+  }
+
+  .resume .resumecontainer .btn-trash {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+}
+
+@media screen and (max-width: 4768px) {
+  .section, .section .resume {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .resume .value {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .resume .resume-dados .dados .data, .resume .resume-dados .dados .data .valoruni {
+    display: contents;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+
+  .resumecontainer {
+    flex-direction: column;
+  }
+
+
+  /* .resume .resume-dados .dados {
+    flex-direction: column;
+  } */
+
+  .resume .resume-dados {
+    max-width: 100%;
+  }
+}

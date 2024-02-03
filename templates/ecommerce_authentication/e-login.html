@@ -9,31 +9,44 @@
 
 {% block e-container %}
 
+<h3>Login</h3>
+<h5>Coloque seu E-mail e Senha para entrar</h5><br>
+<a href="{% url 'e-home' %}">
+    <button type="button" class="icon-home">
+        <i class="bi bi-house"></i>
+        Home
+    </button>
+</a>
+
 <section class="area-login">
-    <h3>Login</h3>
-    <h5>Coloque seu E-mail e Senha para entrar</h5>
-    <form action="{% url 'login_view' %}" method="post">{% csrf_token %}
-        <div class="input">
-            <label for="email">E-mail</label><br>
-            <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
-        </div>
-        <div class="input">
-            <label for="senha">Senha</label><br>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha">
-        </div>
-        <input type="submit" class="submit" value="Entrar">
-    </form>
-    <br>
-    <br>
-    {% for message in messages %}
+    <div class="left">
+        <img src="{% static 'ecommerce_authentication/static/img/Login-ecommerce.png' %}" alt="Login">
+    </div>
+    <div class="rigth">
+        <form action="{% url 'login_view' %}" method="post">{% csrf_token %}
+            <div class="input">
+                <label for="email">E-mail</label><br>
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+            </div>
+            <div class="input">
+                <label for="senha">Senha</label><br>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha">
+            </div>
+            <a href="{% url 'password_reset' %}">Esqueceu a senha?</a>
+            <input type="submit" class="submit" value="Entrar">
+        </form>
+        <p>Não possui Cadastro? <a href="{% url 'cadastro_user' %}">Clique aqui para se inscrever</a></p>
+    </div>
+</section>
+<br>
+{% for message in messages %}
     <div class="container-fluid p-0">
-      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
     </div>
-    {% endfor %}
-</section>
+    </div>
+{% endfor %}
 
 {% endblock %}
 

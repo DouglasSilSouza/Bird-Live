@@ -1,5 +1,9 @@
-main {
-    overflow-y: hidden;
+section .navbar {
+    display: none !important;
+}
+
+.content {
+    margin: 0;
 }
 
 .content .filters {
@@ -7,24 +11,73 @@ main {
 }
 
 .area-login {
-    height: calc(100vh - 225px);
+    background-color: var(--color-1);
+    display: flex;
+    border-radius: 25px;
+    box-shadow: 5px 5px 9px 5px grey;
 }
 
-.area-login h3,
-.area-login h5 {
+.container h3,
+.container h5 {
   text-align: center;
 }
 
-.area-login form {
-  background-color: var(--color-1);
+.container .icon-home {
+    display: flex;
+    margin: 30px;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--color-1);
+    color: #DDD;
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .icon-home i {
+    font-size: 35px;
+}
+
+
+.area-login .left {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.area-login .left img {
+    width: 70%;
+}
+
+.area-login .rigth {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.area-login .rigth form {
+  width: 100%;
   padding: 15px;
-  border-radius: 25px;
-  box-shadow: 5px 5px 9px 5px grey;
   display: flex;
   align-items: center;
   justify-items: center;
   flex-direction: column;
   gap: 15px;
+}
+
+.area-login .rigth a, .area-login .rigth p {
+    color: #DDD;
+}
+
+.area-login .rigth a:hover {
+    color: var(--color-4);
 }
 
 .area-login form .input {width: 60%;}
@@ -57,9 +110,31 @@ main {
 }
 
 @media screen and (max-width: 578px) {
+    section .navbar {
+        display:block !important;
+     }
+
+    section .navbar .navbar_toggle { 
+        position: absolute;      
+        top: 0;    
+        right: 0;
+    }
+
+    .container a .icon-home {
+        display: none;
+    }
 
     .area-login {
-    overflow: hidden;
+        overflow: hidden;
+        flex-direction: column-reverse;
+    }
+
+    .area-login .left{
+        display: none;
+    }
+
+    .area-login .rigth p {
+        padding: 10px;
     }
 
     .area-login form .input {
@@ -70,6 +145,12 @@ main {
 @media screen and (max-width: 478px) {
     .content .container {
         width: 100%;
-        padding: 0;
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 281px) {
+    main{
+        overflow-y: auto;
     }
 }

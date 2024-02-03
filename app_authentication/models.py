@@ -15,7 +15,7 @@ class Cadastro(AbstractUser):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
     date_birthday = models.DateTimeField(null=True, blank=True)
-    cep = models.IntegerField(null=True, blank=True)
+    cep = models.CharField(max_length=10,null=True, blank=True)
     bairro = models.CharField(max_length=50, null=True, blank=True)
     endereco = models.CharField(max_length=100, null=True, blank=True)
     number = models.CharField(max_length=8, null=True, blank=True)

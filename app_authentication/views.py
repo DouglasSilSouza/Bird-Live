@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from django.contrib.auth.forms import SetPasswordForm
 from .login_required_message import login_required_message_and_redirect
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.contrib import messages
+from django.conf import settings
 from .models import Cadastro
 import re
 
@@ -23,16 +24,31 @@ def login_view(request):
             user = authenticate(email=email, password=password)
 
             if user is not None:
-                if user is not None:
-                    login(request, user)
-                    if user.is_colaborador:
-                        return redirect('home')  # Use o nome da rota diretamente
-                    else:
-                        return redirect('e-home')  # Use o nome da rota diretamente
+                login(request, user)
+                if user.is_colaborador:
+                    return redirect('home')  # Use o nome da rota diretamente
+                else:
+                    return redirect('e-home')  # Use o nome da rota diretamente
             else:
                 messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.', extra_tags='error')
     return render(request, 'ecommerce_authentication/e-login.html')  # Substitua 'seu_template.html' pelo nome correto do seu template
 
+def enviar_email(email):
+    dados = Cadastro.objects.filter(email=email).first()
+    mensagem = "E-mail Teste"
+    try:
+        mail = EmailMessage(subject=dados.first_name, body=mensagem,
+                                from_email=settings.EMAIL_HOST_USER,
+                                to=[email])
+        mail.send()
+        status = "success"
+        text = "Caso Exista esse E-mail em nossas bases verifique sua caixa de entrada, foi enviado uma mensagem para o E-mail fornecido!"
+    except Exception as e:
+        print(e)
+        status = "error"
+        text = "Erro ao enviar E-mail"
+        print(text)
+    return status, text
 
 def login_view_colab(request):
     if request.method == "POST":
@@ -145,29 +161,35 @@ def cadastro_usuario(request):
 
         if not (nome, email, sobrenome, password, conf_password):
             messages.error(request, "Possui algum campo em branco!", extra_tags="error")
-            return JsonResponse({"message": "Possui algum campo em branco!", "status": 400})
+            #return JsonResponse({"message": "Possui algum campo em branco!", "status": 400})
         elif password != conf_password:
             messages.error(request, "Senhas não coincidem!", extra_tags="error")
-            return JsonResponse({"message": "Senhas não coincidem!", "status": 400})
+            #return JsonResponse({"message": "Senhas não coincidem!", "status": 400})
         elif not re.fullmatch(regex_email, email):
             messages.error(request, "E-mail inválido!", extra_tags="error")
-            return JsonResponse({"message": "E-mail inválido!", "status": 400})
+            #return JsonResponse({"message": "E-mail inválido!", "status": 400})
         elif not re.fullmatch(regex_senha, password):
             messages.error(request, "Senha não contém uma letra maiúscula, minúscula e caracte especial.!", extra_tags="error")
-            return JsonResponse({"message": "Senha não contém uma letra maiúscula, minúscula e caracte especial.!", "status": 400})
+            #return JsonResponse({"message": "Senha não contém uma letra maiúscula, minúscula e caracte especial.!", "status": 400})
         elif len(nome) <= 3:
             messages.error(request, "Nome Inválido!", extra_tags="error")
-            return JsonResponse({"message": "Nome Inválido!", "status": 400})
+            #return JsonResponse({"message": "Nome Inválido!", "status": 400})
         elif len(sobrenome) <= 3:
             messages.error(request, "Sobrenome Inválido!", extra_tags="error")
-            return JsonResponse({"message": "Sobrenome Inválido!", "status": 400})
+            #return JsonResponse({"message": "Sobrenome Inválido!", "status": 400})
         elif user_bd.exists():
             messages.error(request, "Usuário já cadastrado!", extra_tags="error")
-            return JsonResponse({"message": "Usuário já cadastrado!", "status": 400}) 
+            #return JsonResponse({"message": "Usuário já cadastrado!", "status": 400}) 
         elif not (telefone, documento, num_documento, sexo, endereco, numero, cep, nascimento):
             messages.error(request, "Possui algum campo em branco!", extra_tags="error")
-            return JsonResponse({"message": "Possui algum campo em branco!", "status": 400})
+            #return JsonResponse({"message": "Possui algum campo em branco!", "status": 400})
         else:
+            # Encontrando o DDD usando expressões regulares
+            ddd = re.search(r'\((\d{2})\)', telefone).group(1)
+
+            # Removendo os parênteses e traço
+            telefone_limpo = re.sub(r'[()-]', '', telefone)
+            
             user = Cadastro(
                 email=email,
                 username=nome,
@@ -175,7 +197,8 @@ def cadastro_usuario(request):
                 last_name=sobrenome,
                 password=make_password(password),
                 is_active = True,
-                phone = telefone,
+                code_area = ddd,
+                phone = telefone_limpo,
                 type_document = documento,
                 cpf_cnpj = num_documento,
                 date_birthday = nascimento,
@@ -187,8 +210,7 @@ def cadastro_usuario(request):
             user.save()
             messages.success(request, "Usuario cadastrado com sucesso!", extra_tags="success")
             return redirect(reverse('login_view'))
-    else:
-        return render(request, 'ecommerce_authentication/e-cadastro.html')
+    return render(request, 'ecommerce_authentication/e-cadastro.html')
 
 @login_required_message_and_redirect(login_url='login_view')
 def configuracoes(request):

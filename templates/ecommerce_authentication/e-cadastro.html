@@ -15,6 +15,16 @@
     </div>
     <div class="bottom">
         <p>Cadastre-se</p>
+
+    {% for message in messages %}
+        <div class="container-fluid p-0">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        </div>
+    {% endfor %}
+
         <form action="{% url 'cadastro_user' %}" method="post">{% csrf_token %}
             <div class="input flex">
                 <div class="input">
@@ -33,7 +43,7 @@
             <div class="input flex">
                 <div class="input">
                     <label for="cep">CEP</label><p class="obrigatorio">*</p><br>
-                    <input type="text" id="cep" name="cep" data-mask="00000-000" data-mask-reverse="true" placeholder="Digite seu cep">
+                    <input type="text" id="cep" name="cep" placeholder="Digite seu cep" maxlength="9">
                 </div>
                 <div class="input">
                     <label for="numero">Número</label><p class="obrigatorio">*</p><br>
@@ -58,7 +68,7 @@
             <div class="input flex">
                 <div class="input">
                     <label for="telefone">Telefone</label><p class="obrigatorio">*</p><br>
-                    <input type="text" id="telefone" name="telefone" data-mask="(00) 00000-0000" data-mask-reverse="true" placeholder="Digite seu telefone">
+                    <input type="text" id="telefone" name="telefone" placeholder="Digite seu telefone" maxlength="15">
                 </div>
                 <div class="input">
                     <label for="documento">Documento</label><p class="obrigatorio">*</p><br>
@@ -71,7 +81,7 @@
                 </div>
                 <div class="input">
                     <label for="numero_documento">Número do Documento</label><p class="obrigatorio">*</p><br>
-                    <input type="text" id="numero_documento" name="numero_documento" placeholder="Digite o número do documento">
+                    <input type="text" id="numero_documento" name="numero_documento" placeholder="Digite o número do documento" maxlength="14">
                 </div>
             </div>
             <div class="input">
@@ -95,20 +105,36 @@
         </form>        
     </div>
 </section>
-
-{% for message in messages %}
-    <div class="container-fluid p-0">
-      <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    </div>
-    {% endfor %}
-
 {% endblock %}
 
 {% block e-scripts %}
-    <script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="//assets.locaweb.com.br/locastyle/edge/javascripts/locastyle.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#cep').mask('00000-000');
+        $('#telefone').mask('(00) 00000-0000');
+        // Função para aplicar a máscara com base no tipo selecionado
+        function aplicarMascara(tipo) {
+            if (tipo === 'cpf') {
+                $('#numero_documento').mask('000.000.000-00');
+            } else if (tipo === 'cnpj') {
+                $('#numero_documento').mask('00.000.000/0000-00');
+            } else {
+                // Lógica para outros tipos de documentos, se necessário
+            }
+        }
+
+        // Evento de mudança no select
+        $('#documento').change(function(){
+            // Obtém o valor selecionado
+            var tipoSelecionado = $(this).val();
+
+            // Chama a função para aplicar a máscara
+            aplicarMascara(tipoSelecionado);
+        });
+    });
+</script>
+
     <script src="{% static 'ecommerce_authentication/static/js/e-cadastro.js' %}" type="module"></script>
 {% endblock %}

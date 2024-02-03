@@ -348,7 +348,21 @@ background-color: #a5dc86;
     height: 25px;
 }
 
+.my-swal {
+    width: 60vw;
+}
+
+
 @media screen and (max-width: 451px) {
+    .area-payment {
+        padding: 15px;
+    }
+
+    .form_pix, .form_credit-card  {
+        width: 100%;
+        padding: 5px;
+    }
+
     .content {
         padding: 0;
     }
@@ -371,6 +385,10 @@ background-color: #a5dc86;
     form .flexbox {
         flex-wrap: wrap;
         gap: 0 15px;
+    }
+
+    .my-swal {
+        width: 100%;
     }
     
 }

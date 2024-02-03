@@ -112,6 +112,12 @@
     padding-top: 7px;
 }
 
+@media screen and (max-width: 578px) {
+    .container form {
+        max-width: 100%;
+    }
+}
+
 @media screen and (max-width: 451px) {
 
     .title-h4 { 

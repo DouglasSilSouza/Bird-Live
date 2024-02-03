@@ -21,30 +21,41 @@ sdk = mercadopago.SDK(os.getenv("MP_TOKEN"))
 # Load the stored environment variables
 load_dotenv()
 
+def status_rected_pay(data):
+    match data:
+        case 'cc_rejected_insufficient_amount':
+            text = 'Saldo insuficiente'
+        case 'cc_rejected_bad_filled_security_code':
+            text = 'Código de segurança inválido'
+        case 'cc_rejected_bad_filled_date':
+            text = 'Data de vencimento inválida'
+    return text
+
 @login_required_message_and_redirect(login_url='login_view')
 def process_payment(request):
     if request.method == 'POST':
         user = Cadastro.objects.filter(id=request.user.id).first()
         if request.body:
-
-            dados = json.loads(request.body)
-
-            mp = MercadoPago(user)
-            response = mp.criar_pagamento(dados).json()
-
-            if response.get('payment_method_id') == 'pix':
-                if response.get("point_of_interaction") is None:
-                        data = {'code': int(response.get('status')), 'message': response.get('message')}
-                else:
-                        data = get_qrcode(response["point_of_interaction"]["transaction_data"])
-                        data = {'data': data, 'code': response.status_code}
-
-            if response.get('status') == 'approved':
-                data = {'code': 200,'message': 'pagamento realizado com sucesso'}
-            else:
-                data = {'code': response.get('status'),'message': f'Pagamento recusado: {response.get("cause")[0].get("description")}'}
-
             try:
+                dados = json.loads(request.body)
+                mp = MercadoPago(user)
+                response = mp.criar_pagamento(dados).json()
+                print(response)
+                match response.get('payment_type_id'):
+                    case 'bank_transfer':
+                        if response.get("point_of_interaction") is None:
+                            data = {'code': int(response.get('status')), 'message': response.get('message')}
+                        else:
+                            qrcode_data  = get_qrcode(response["point_of_interaction"]["transaction_data"])
+                            data = {'data': qrcode_data , 'code': 200}
+                    case 'credit_card':                  
+                        match response.get('status'):
+                            case 'approved':
+                                data = {'code': 200,'message': 'pagamento realizado com sucesso'}
+                            case 'rejected':
+                                status_text = status_rected_pay(response.get("status_detail", None))
+                                data = {'code': 400,'message': f'Pagamento recusado pela operadora do cartão por {status_text}!'}
+            
                 payments = Payments.objects.create(
                     id_payment = response.get('id'),
                     user = request.user,
@@ -61,19 +72,18 @@ def process_payment(request):
                 )
                 payments.save()
                 return JsonResponse(data)
-            
             except json.JSONDecodeError as e:
-                return JsonResponse({"error": "Erro ao decodificar JSON na solicitação."}, status=400)
+                return JsonResponse({"error": "Erro ao decodificar JSON na solicitação.", "code": 400})
             
             except Exception as e:
                 print(e)
                 traceback_str = traceback.format_exc()
                 print(f"Erro: {traceback_str}")
-                return JsonResponse({"error": str(e)}, status=500)
+                return JsonResponse({"error": str(e), "code": 500})
             except:
-                return JsonResponse({"error": response.get('message')}, status=response.get('status'))
+                return JsonResponse({"error": response.get('message'), "code": response.get('status')})
         else:
-            return JsonResponse({"error": "Corpo da solicitação vazio."}, status=400)
+            return JsonResponse({"error": "Corpo da solicitação vazio.", "code": 400})
 
 @login_required_message_and_redirect(login_url='login_view')
 def process_payment_pix(request):

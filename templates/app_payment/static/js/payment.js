@@ -1,35 +1,37 @@
 // Função que faz a solicitação AJAX
 function obterChavePublica() {
-    return new Promise(function (resolve, reject) {
-      fetch("/payments/endpoints_api/", {
-        method: "get",
+  return new Promise(function (resolve, reject) {
+    fetch("/payments/endpoints_api/", {
+      method: "get",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-          }
-          return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-        })
-        .then((data) => {
-          let publicKey = data.public_key,
-              total = data.total,
-              infoProdutos = data.infoProdutos;
-          resolve({publicKey, total, infoProdutos}); // Resolve a promessa com a chave pública
-        })
-        .catch((error) => {
-          reject("Erro ao obter a chave pública."); // Rejeita a promessa em caso de erro
-        });
-    });
-  }
+      .then((data) => {
+        let publicKey = data.public_key,
+          total = data.total,
+          infoProdutos = data.infoProdutos;
+        resolve({ publicKey, total, infoProdutos }); // Resolve a promessa com a chave pública
+      })
+      .catch((error) => {
+        reject("Erro ao obter a chave pública."); // Rejeita a promessa em caso de erro
+      });
+  });
+}
 
-const CSRFToken = document.querySelector('input[name="csrfmiddlewaretoken').value;
+const CSRFToken = document.querySelector(
+  'input[name="csrfmiddlewaretoken'
+).value;
 
 let notification = [];
 // Função assíncrona para carregar o MercadoPago e criar o objeto
 async function inicializarMercadoPago() {
   return new Promise(async (resolve, reject) => {
     try {
-      const {publicKey, total, infoProdutos} = await obterChavePublica();
+      const { publicKey, total, infoProdutos } = await obterChavePublica();
       const mp = new window.MercadoPago(publicKey);
 
       const cardForm = mp.cardForm({
@@ -118,31 +120,40 @@ async function inicializarMercadoPago() {
                   },
                 },
               }),
-            }
+            };
 
             fetch("/payments/process_payment/", options)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`);
-              }
-              return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-            })
-            .then((data) => {
-              if (data.code == 200) {               
-                window.location.href = "/payments/pagamento_concluido/";
-              } else {
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
+              })
+              .then((data) => {
+                switch (data.code) {
+                  case 200:
+                    window.location.href = "/payments/pagamento_concluido/";
+                    break;
+                  case 400:
+                    Toast.fire({
+                      icon: "error",
+                      title: `${data.message}`,
+                    });
+                    break;
+                  default:
+                    Toast.fire({
+                      icon: "error",
+                      title: `${data.error}`,
+                    });
+                    break;
+                }
+              })
+              .catch((error) => {
                 Toast.fire({
                   icon: "error",
-                  title: `${data.message} | Status: ${data.code}`,
+                  title: "Erro ao enviar dados: " + error,
                 });
-              }
-            })
-            .catch((error) => {
-              Toast.fire({
-                icon: "error",
-                title: "Erro ao enviar dados" + error,
               });
-            });
           },
         },
       });
@@ -154,30 +165,29 @@ async function inicializarMercadoPago() {
 }
 
 const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 10000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 10000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 // Função assíncrona para carregar o MercadoPago e criar o objeto
 async function inicializarMercadoPagoPIX() {
   return new Promise(async (resolve, reject) => {
     try {
-      const {publicKey, total, infoProdutos} = await obterChavePublica();
+      const { publicKey, total, infoProdutos } = await obterChavePublica();
       const mp = new window.MercadoPago(publicKey);
 
       (async function getIdentificationTypes() {
         try {
           const identificationTypes = await mp.getIdentificationTypes();
-          const identificationTypeElement = document.getElementById(
-            "identificationType"
-          );
+          const identificationTypeElement =
+            document.getElementById("identificationType");
 
           createSelectOptions(identificationTypeElement, identificationTypes);
         } catch (e) {
@@ -218,8 +228,8 @@ async function inicializarMercadoPagoPIX() {
 
 async function data_qrcode() {
   const btn = document.querySelector("#form-pix");
-  
-  const {publicKey, total, infoProdutos} = await obterChavePublica();
+
+  const { publicKey, total, infoProdutos } = await obterChavePublica();
 
   const options = {
     method: "POST", // Método HTTP que você deseja usar (neste caso, POST)
@@ -228,8 +238,8 @@ async function data_qrcode() {
       "X-CSRFToken": CSRFToken,
     },
     body: JSON.stringify({
-      payment_method_id: 'pix',
-      transactionAmount: total,
+      payment_method_id: "pix",
+      transaction_amount: Number(total),
       description: infoProdutos,
     }), // Converte os dados para JSON e os coloca no corpo da requisição
   };
@@ -238,65 +248,75 @@ async function data_qrcode() {
     e.preventDefault();
 
     fetch("/payments/process_payment/", options)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`);
-      }
-      return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-    })
-    .then((data) => {
-      if (data.code == 200) {
-        let data_book = data.book;
-        let book = JSON.parse(data_book);
-        Swal.showLoading();
-        Swal.fire({
-          icon: "info",
-          title: `Pagamento via QR Code`,
-          html: `<img src="data:image/jpeg;base64,${data.data.qrcode_base64}" alt="${book[0].fields.title}" style="width: 15rem;" />`,
-          input: "text",
-          inputLabel: "Código PIX copia e cola",
-          inputValue: data.data.qrcode,
-          confirmButtonText: "Copiar",
-          confirmButtonColor: "#3085d6",
-          showCancelButton: true,
-          cancelButtonColor: "#d33",
-          cancelButtonText: "Cancelar",
-          allowOutsideClick: false, // Evita que o modal seja fechado ao clicar fora dele
-          showCloseButton: true, // Exibe um botão de fechamento no modal
-          width: "60vw",
-          // Adicione o evento de copiar ao clicar no botão "Copiar"
-          preConfirm: function () {
-            document.querySelector("#swal2-input").select();
-            document.execCommand("copy");
-            // Use Swal.showValidationMessage para exibir a notificação sem fechar o modal
-            Swal.showValidationMessage(
-              "O código PIX foi copiado para a área de transferência."
-            );
-            // Adicione a classe CSS personalizada ao input
-            document
-              .querySelector("#swal2-input")
-              .classList.add("remove-input-border");
-          },
-          customClass: {
-            validationMessage: "custom-icon-validation", // Aplica a classe CSS personalizada ao ícone
-          },
-        });
-      } else {
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
+      })
+      .then((data) => {
+        switch (data.code) {
+          case 200:
+            Swal.showLoading();
+            Swal.fire({
+              icon: "info",
+              title: `Pagamento via QR Code`,
+              html: `<img src="data:image/jpeg;base64,${data.data.qrcode_base64}" alt="" style="width: 15rem;" />`,
+              input: "text",
+              inputLabel: "Código PIX copia e cola",
+              inputValue: data.data.qrcode,
+              confirmButtonText: "Copiar",
+              confirmButtonColor: "#3085d6",
+              showCancelButton: true,
+              cancelButtonColor: "#d33",
+              cancelButtonText: "Cancelar",
+              allowOutsideClick: false, // Evita que o modal seja fechado ao clicar fora dele
+              showCloseButton: true, // Exibe um botão de fechamento no modal
+              customClass: {
+                container: "my-swal", // Classe CSS personalizada para o container do modal
+              },
+              // Adicione o evento de copiar ao clicar no botão "Copiar"
+              preConfirm: function () {
+                document.querySelector("#swal2-input").select();
+                document.execCommand("copy");
+                // Use Swal.showValidationMessage para exibir a notificação sem fechar o modal
+                Swal.showValidationMessage(
+                  "O código PIX foi copiado para a área de transferência."
+                );
+                // Adicione a classe CSS personalizada ao input
+                document
+                  .querySelector("#swal2-input")
+                  .classList.add("remove-input-border");
+              },
+              customClass: {
+                validationMessage: "custom-icon-validation", // Aplica a classe CSS personalizada ao ícone
+              },
+            });
+            break;
+          case 400:
+            Toast.fire({
+              icon: "error",
+              title: `${data.message}`,
+            });
+            break;
+          default:
+            Toast.fire({
+              icon: "error",
+              title: `${data}`,
+            });
+            break;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
         Toast.fire({
           icon: "error",
-          title: `${data.message} | Status: ${data.code}`,
+          title: "Erro ao enviar dados: " + error,
         });
-      }
-    })
-    .catch((error) => {
-      Toast.fire({
-        icon: "error",
-        title: "Erro ao enviar dados" + error,
       });
-    });
   });
 }
 
-inicializarMercadoPago()
-inicializarMercadoPagoPIX()
-data_qrcode()
+inicializarMercadoPago();
+inicializarMercadoPagoPIX();
+data_qrcode();

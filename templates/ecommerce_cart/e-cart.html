@@ -12,7 +12,7 @@
 {% block e-container %}
 
 <section class="section">
-  <section class="resume" {% if carrinho %}style="overflow: auto;"{% endif %}>
+  <section class="resume">
       {% if carrinho %}
           {% for cart in carrinho %}
               <div class="resumecontainer" id="product-{{cart.produto_id}}">
@@ -40,7 +40,7 @@
                               </button>
                           </div>
                       </div>
-                      <div class="dados">
+                      <div class="dados value">
                           <label class="data label">valor uni.: </label>
                           <p class="data">R$ <span class="valoruni">{{cart.valor_unitario}} | </span></p><p style="margin: 0;"> Sub-Total: <span class="subvalorcalc"></span></p>
                       </div>

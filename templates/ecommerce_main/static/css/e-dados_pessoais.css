@@ -1,0 +1,201 @@
+.content {
+    justify-content: space-around;
+}
+
+.content .container{
+    width: 100%;
+    margin: 0;
+}
+
+.content .filters {
+  display: none;
+}
+
+.main{
+    display: flex;
+}
+
+.main .left {
+    width: 20%;
+    border-right: 1px solid gray;
+}
+
+.main .left .nav-links {
+  height: 100%;
+  padding: 30px 0 150px 0;
+  overflow: auto;
+}
+
+.main .left .nav-links::-webkit-scrollbar {
+  display: none;
+}
+
+.main .left .nav-links li {
+  position: relative;
+  list-style: none;
+  transition: all 0.4s ease;
+  margin: 5px;
+}
+
+.main .left .nav-links li:hover {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.main .left .nav-links li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.main .left .nav-links li a i {
+    height: 50px;
+    min-width: 78px;
+    text-align: center;
+    line-height: 50px;
+    color: var(--title);
+    font-size: 30px;
+    transition: all 0.3s ease;
+}
+
+.main .left .nav-links li a .link_name {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--title);
+  transition: all 0.4s ease;
+}
+
+.main .right{
+    width: 80%;
+    overflow: auto;
+}
+
+.main .right #dados_pessoais, .main .right #senhas, .main .right #historicos {
+    margin: 10px;
+    padding: 15px;
+}
+
+form {
+    width: 100%;
+    overflow: auto;
+}
+
+.main .right .infos{
+    background-color: var(--color-1);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.main .right .infos h3 {
+    color: #ddd;
+}
+
+.main .right .infos .envelopado{
+    padding: 15px;
+    background-color: #fcfcfc;
+    border-radius: 15px;
+}
+
+.main .right .infos .envelopado p label{
+    display: block;
+}
+
+.main .right .infos .envelopado p input{
+    width: 70% !important;
+}
+
+.main .right .infos .envelopado ul{
+    color: #5a5a5a;
+}
+
+.main .right .infos .envelopado .errorlist{
+    width: 50%;
+    margin: 0 auto 40px auto;
+    padding: 15px;
+    align-items: center;
+    border-radius: 15px;
+    list-style-type: none;
+    font-weight: 700;
+    background-color: var(--bs-danger-bg-subtle);
+    color: var(--bs-danger-text-emphasis);
+    border-color: var(--bs-danger-border-subtle);
+}
+
+.main .right .infos .half  {
+    display: flex;
+}
+
+.main .right .infos .half .metade {
+    width: 50%;
+    padding: 7px;
+    margin-bottom: 15px;
+}
+
+.main .right .infos .half .metade label, .main .right .infos .envelopado p label {
+    font-weight: 900;
+}
+
+.main .right .infos .half .metade input, select, .main .right .infos .envelopado p input{
+    width: 98%;
+    height: 2.5rem;
+    border: none;
+    border-bottom: 1px solid gray;
+    background-color: #fcfcfc;
+    padding: 0 0 0 5px;
+}
+
+.main .right .submit {
+    border: none;
+    border-radius: 25px;
+    background-color: var(--color-5);
+    color: #DDD;
+    padding: 10px 15px;
+    width: 30%;
+    transition: opacity 1s ease;
+    margin: auto;
+    display: block;
+}
+
+.main .right .submit:hover {
+    opacity: .6;
+}
+
+@media screen and (max-width: 578px) {
+    .content{
+        margin: 0;
+    }
+    .main{flex-direction: column;}
+    .main .left{
+        border-right: none;
+        border-bottom: 1px solid gray;
+        width: 100%;
+    }
+
+    .main .left ul{
+        padding: 0 !important;
+    }
+
+    .main .right{
+        width: 100%;
+    }
+
+    .main .right #dados_pessoais, .main .right #senhas, .main .right #historicos{
+        margin: 15px 0 0 0;
+        padding: 0;
+    }
+
+    .main .right .infos .half  {
+        flex-direction: column;
+    }
+
+    .main .right .infos .half .tt{
+        width: 100%;
+    }
+
+    .main .right .infos .half .metade {
+        width: 100%;
+    }
+}
