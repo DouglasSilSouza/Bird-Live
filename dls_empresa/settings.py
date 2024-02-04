@@ -172,7 +172,7 @@ AUTH_USER_MODEL = 'app_authentication.Cadastro'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'douglassilvadesouza2@gmail.com' # conta gmail remetente
-EMAIL_HOST_PASSWORD = 'zzkf tsxg hfpz mtja'
+EMAIL_HOST_USER = os.getenv("ENVIOS_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("SENHA_GOOGLE")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
