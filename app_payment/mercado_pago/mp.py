@@ -3,9 +3,12 @@ import requests
 import json
 import os
 
+from dls_empresa.variaveis import get_secret
+variavel = get_secret()
+
 class MercadoPago:
     def __init__(self, usuario) -> None:
-        self.token = os.getenv("MP_TOKEN")
+        self.token = variavel["MP_TOKEN"]
         self.url_base = "https://api.mercadopago.com"
         self.session = requests.Session()
         self.user = usuario

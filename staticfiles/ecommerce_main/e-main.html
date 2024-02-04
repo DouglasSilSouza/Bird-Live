@@ -1,0 +1,24 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Inicio{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_main/static/css/e-main.css' %}{% endblock %}
+
+{% block e-container %}
+<div class="products">
+    {% for dados in data %}
+    <div class="product" id="product-{{dados.id}}">
+        <img src="{{dados.image}}" alt="{{dados.title}}">
+        <h3 class="limited">{{dados.title}}</h3>
+        <a href="{% url 'productonly' dados.id %}"><button class="btnPrice">R$ {{dados.price}}</button></a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block e-scripts %}
+<script src="{% static 'ecommerce_main/static/js/e-main.js' %}"></script>
+{% endblock %}

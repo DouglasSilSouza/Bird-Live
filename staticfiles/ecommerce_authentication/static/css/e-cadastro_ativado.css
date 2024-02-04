@@ -1,0 +1,35 @@
+.content .filters {
+    display: none;
+  }
+
+.main{
+    background-color: var(--color-1);
+    border-radius: 15px;
+    margin: 15px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main h3, .main p{
+    color: #DDD;
+}
+
+.main p {
+    text-align: center;
+}
+
+.main button {
+    border: none;
+    border-radius: 25px;
+    background-color: var(--color-5);
+    color: #DDD;
+    padding: 10px 15px;
+    width: 100%;
+    transition: opacity 1s ease;
+}
+
+.main button:hover {
+    opacity: .6;
+}

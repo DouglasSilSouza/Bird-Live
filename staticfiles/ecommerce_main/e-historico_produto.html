@@ -1,0 +1,28 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Histórico de Compras{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_main/static/css/e-historico_produto.css' %}{% endblock %}
+
+{% block e-container %}
+    <section class="history">
+        <h3>ID: {{history.id_payment}}</h3>
+        <h3>Valor total da compra: R$ {{history.amount}}</h3>
+        <h3>Produtos:</h3>
+        {% for prod in prods %}
+        <div class="produto">
+            <img src="{{prod.image_url}}" alt="prod.title">
+            <div class="dados">
+                <h5>{{prod.title}}</h5>
+                <p>Quantidade: {{prod.quantity}}</p>
+                <p>Valor unitário: R$ {{prod.valor_unitario}}</p>
+                <p>Subtotal: R$ {{prod.subtotal}}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </section>
+{% endblock %}

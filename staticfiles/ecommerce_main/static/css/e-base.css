@@ -1,0 +1,255 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --color-1: #5e161d;
+  --color-2: #1d1e40;
+  --color-3: #5d688c;
+  --color-4: #f2bc50;
+  --color-5: #569172;
+  --title: #303030;
+  --subtitle: #716969;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-content: stretch;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+main {
+  background-color: #fcfcfc;
+  width: 100%;
+}
+
+nav {
+  width: 100%;
+  height: 100px;
+  background-color: var(--color-1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav figure img {
+  margin: 0 15px;
+  width: 5rem;
+}
+
+nav .links {
+  display: flex;
+  height: 100%;
+  gap: 15px;
+  margin: 0 15px;
+  align-items: center;
+}
+
+nav .links a {
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #ddd;
+   /* Adicione position:relative para usar position:absolute no ::after */
+  position: relative;
+}
+
+nav .links a::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0; /* Defina a largura inicial como 0 */
+  height: 3px; /* Altura desejada da barra */
+  background-color: var(--color-4); /* Cor da barra */
+  transition: width 0.5s ease; /* Adicione uma transição para a largura */
+  transform-origin: left; /* Defina a origem da transformação à esquerda */
+}
+
+nav .links a:hover::after {
+  width: 100%; /* Defina a largura desejada para preencher o link */
+}
+
+nav .links a .bi-person{
+  font-size: 1.5rem;
+}
+
+nav .links .buttom {
+  border: 3px solid var(--color-5);
+  border-radius: 15px;
+  padding: 7px;
+  transition: background 0.5s ease;
+}
+
+nav .links .buttom:hover {
+  background-color: var(--color-5);
+  color: #ddd;
+}
+
+nav .links .buttom:hover::after {
+  width: 0;
+}
+
+nav .navbar_toggle {
+  display: none;
+}
+
+.content {
+  display: flex;
+  margin: 15px;
+  gap: 15px;
+}
+
+.content .filters {
+  width: 20%;
+  padding: 15px;
+  border-right: 1px solid gray;
+}
+
+.filters .tags {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filters .tags h3 {
+  color: #ddd;
+  border-radius: 15px;
+  text-align: center;
+  background-color: var(--subtitle);
+}
+
+.filters .tags span {
+  color: var(--title);
+  padding-left: 15px;
+  cursor: pointer;
+  width: 70%;
+}
+
+.filters .tags span:hover {
+  background-color: #77777783;
+  color: #ededed;
+  border-radius: 5px;
+  transform: scale(1.05);
+}
+
+.content .container {
+  width: 80%;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  padding: 15px 0 0 0;
+  flex-direction: column;
+  gap: 5px;
+  background-color: var(--color-2);
+  color: var(--subtitle);
+  width: 100%;
+}
+
+.esconder {
+  display: none !important;
+}
+
+@media screen and (max-width: 827px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .content .filters {
+    width: 100%;
+    border-right: none;
+  }
+}
+
+@media screen and (max-width: 624px) {
+  .navbar figure {
+    margin-bottom: 0;
+  }
+
+  nav figure img {
+    width: 3rem;
+    margin: 0 0 0 15px;
+  }
+}
+
+@media screen and (max-width: 578px) {
+  .content .container {
+    width: 100%;
+  }
+
+  main {
+    overflow-x: hidden;
+  }
+
+  .overflow {
+    overflow: hidden;
+  }
+
+  nav {
+    
+height: 65px;
+  }
+
+  nav figure {
+    margin: 0;
+  }
+
+  nav .navbar_toggle {
+    display: block;
+    cursor: pointer;
+    color: #ddd;
+    font-size: 2rem;
+    margin: 0 15px 0 0;
+  }
+
+  nav .links.close {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  nav .links {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    width: 100vw;
+    margin: 20px 0 0 0;
+    padding: 15px 0 0 25px;
+    height: 100vh;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 18px;
+    background-color: #fcfcfc;
+    overflow-y: hidden;
+  }
+
+  nav .links a {
+    color: #3a3a3a;
+    font-size: 1.5rem;
+    position: static;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .content .filters {
+    width: 100%;
+    border: none;
+  }
+}

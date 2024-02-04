@@ -7,16 +7,19 @@ from app_authentication.models import Cadastro
 from ecommerce_cart.models import Carrinho, ItemCarrinho
 from app_payment.models import Payments
 from django.urls import reverse
+from dls_empresa.variaveis import get_secret
 from dotenv import load_dotenv
 from datetime import datetime
 import traceback
 import json
 import os
 
+variavel = get_secret()
+
 from .mercado_pago.mp import MercadoPago
 
 import mercadopago
-sdk = mercadopago.SDK(os.getenv("MP_TOKEN"))
+sdk = mercadopago.SDK(variavel["MP_TOKEN"])
 
 # Load the stored environment variables
 load_dotenv()
@@ -95,7 +98,6 @@ def process_payment_pix(request):
                 
                 mp = MercadoPago(user)
                 response = mp.criar_pagamento(dados).json()
-                print(response)
                 
                 if response.get("point_of_interaction") is None:
                     context = {'code': int(response.get('status')), 'message': response.get('message')}
@@ -239,7 +241,7 @@ def endpoints_api(request):
     
     try:
         data = {
-            "public_key": os.getenv("MP_PUBLIC_KEY"),
+            "public_key": variavel["MP_PUBLIC_KEY"],
             "total": total,
             "infoProdutos": infoProdutos
         }

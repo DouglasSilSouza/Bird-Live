@@ -1,0 +1,107 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block css %}{% static 'app_authentication/static/css/dados_ausentes.css' %}{% endblock %}
+
+{% block title %}Dados Ausentes{% endblock %}
+
+{% block outers %}
+  <link rel="stylesheet" type="text/css" href="https://assets.locaweb.com.br/locastyle/edge/stylesheets/locastyle.css">
+{% endblock %}
+
+{% block body %}
+
+<section class="container">
+    <h2 class="title-h2">Campos Ausentes</h3>
+    <h4 class="title-h4">Identificamos que possui alguns campos em branco, insira abaixo para poder continuar!</h5>
+    <p class="sub-title">Esses dados serão pedidos somente uma única vez.</p>
+    <form id="form-checkout">{% csrf_token %}
+        <section class="section-dados">
+            <h5 class="title-form">Dados pessoais</h5>
+
+            <div class="flexbox">
+                <div class="inputBox">
+                    <label for="form-checkout__payerFirstName">Nome</label>
+                    <input type="text" id="form-checkout__payerFirstName" name="payerFirstName" class="input required" placeholder="Insira seu nome" value="{{ user.first_name|default:'' }}">
+                </div>
+                <div class="inputBox">
+                  <label for="form-checkout__payerLastName">Sobrenome</label>
+                  <input type="text" id="form-checkout__payerLastName" name="payerLastName" class="input required" placeholder="Insira o sobrenome" value="{{user.last_name|default:'' }}">
+                </div>
+            </div>
+            <div class="inputBox">
+                <label for="form-birthday">Data de Nascimento</label><br>
+                <input type="date" name="birthday" id="form-birthday" class="input required" placeholder="insira sua Data de Nascimento" value="{{user.birthday|default:'' }}" style="max-width: 300px;">
+              </div>
+            <div class="inputBox">
+              <label for="form-checkout__email">E-mail</label>
+              <input type="email" name="email" id="form-checkout__email" class="input required" placeholder="insira o email" value="{{user.email|default:'' }}">
+            </div>
+            <div class="flexbox">
+                <div class="inputBox">
+                    <label for="type_document">Tipo de documento</label>
+                    <select type="number" name="type_document" id="type_document" class="input required" placeholder="Tipo de documento">
+                        <option value="" selected>Selecione</option>
+                        <option value="cpf">CPF</option>
+                        <option value="cnpj">CNPJ</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                  <label for="cpf_cnpj">Número do documento</label>
+                  <input type="text" disabled name="cpf_cnpj" id="cpf_cnpj" class="input required" placeholder="Número do documento" value="{{ user.cpf_cnpj|default:'' }}">
+                </div>
+            </div>
+            <div class="flexbox">
+                <div class="inputBox">
+                    <label for="codearea">Código de área</label>
+                    <input type="number" name="codearea" id="codearea" class="input required" placeholder="Código de área" value="{{user.phone|slice:'0:1'|default:'55'}}">
+                </div>
+                <div class="inputBox">
+                  <label for="phone">Telefone</label>
+                  <input type="tel" name="phone" id="phone" class="input required" placeholder="Telefone" value="{{user.phone|slice:'2:'|default:''}}">
+                </div>
+            </div>
+        </section>
+        <section class="section-dados">
+            <h5 class="title-form">Endereço</h5>
+            <div class="flexbox">
+              <div class="inputBox">
+                <label for="form-cep">CEP</label>
+                <input type="text" id="form-cep" name="cep" class="input required" placeholder="Insira o CEP" value="{{user.cep|default:''}}">
+              </div>
+              <div class="inputBox">
+                <label for="form-bairro">Bairro</label>
+                <input type="text" id="form-bairro" name="form-bairro" class="input required" placeholder="Insira o Bairro">
+              </div>
+            </div>
+            <div class="inputBox">
+                <label for="form-endereco">Endereço</label>
+                <input type="text" id="endereco" name="endereco" class="input required" placeholder="Insira seu endereço" value="{{user.endereco|default:''}}">
+            </div>
+            <div class="flexbox">
+                <div class="inputBox">
+                  <label for="number">Número</label>
+                  <input type="text" name="number" id="number" class="input required" placeholder="Número" value="{{user.number|default:''}}">
+                </div>
+                <div class="inputBox">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" name="complemento" id="complemento" class="input" placeholder="Complemento" value="{{user.complemento|default:''}}">
+                </div>
+            </div>
+            
+      <input type="submit" value="Próximo" id="form-checkout__submit" class="submit-btn">
+    </form>
+    <!-- Elemento de sobreposição de carregamento -->
+    <div class="overlay" id="loadingOverlay" style="display: none;">
+      <div class="loading-message">Carregando...</div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="//assets.locaweb.com.br/locastyle/edge/javascripts/locastyle.js"></script>
+    <script src="{% static 'app_authentication/static/js/dados_ausentes.js' %}"></script>
+{% endblock %}

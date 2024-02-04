@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
+from .variaveis import get_secret
+variavel = get_secret()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,16 +15,14 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =  os.getenv("SECRET_KEY")
+SECRET_KEY =  variavel["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', '') != 'False'
+DEBUG = variavel['DJANGO_DEBUG'] != 'False'
 
-host = 'bird-live-ewe.ngrok-free.app'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
 
-ALLOWED_HOSTS = [host, 'localhost', '127.0.0.1']
-
-CSRF_TRUSTED_ORIGINS = [f'https://{host}']
+#CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
 # Application definition
 
@@ -96,11 +96,11 @@ MESSAGE_TAGS = {
 DATABASES={
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("NAME"),
-        "USER": os.getenv("USER"),
-        "PASSWORD": os.getenv("PASSWORD"),
-        "HOST": os.getenv("HOST"),
-        "PORT": os.getenv("PORT"),
+        "NAME": variavel["NAME"],
+        "USER": variavel["USER"],
+        "PASSWORD": variavel["PASSWORD"],
+        "HOST": variavel["HOST"],
+        "PORT": variavel["PORT"],
         "OPTIONS": {
             'sql_mode': 'STRICT_ALL_TABLES',
             'charset': 'utf8mb4',
@@ -147,14 +147,14 @@ DEFAULT_CHARSET = 'utf-8'
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/templates/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'templates')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #Location of static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'staticfiles'),
 ]
 
 # Default primary key field type
@@ -172,7 +172,7 @@ AUTH_USER_MODEL = 'app_authentication.Cadastro'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.getenv("ENVIOS_EMAIL")
-EMAIL_HOST_PASSWORD = os.getenv("SENHA_GOOGLE")
+EMAIL_HOST_USER = variavel["ENVIOS_EMAIL"]
+EMAIL_HOST_PASSWORD = variavel["SENHA_GOOGLE"]
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

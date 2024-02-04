@@ -1,4 +1,4 @@
-{% extends 'app_whats/base.html' %}
+{% extends 'app_main/base.html' %}
 {% load static %}
 
 {% block css %}{% static 'app_products/static/css/product_index.css' %}{% endblock %}
@@ -17,11 +17,20 @@
     </article>
 </section>
 <section>
-    <article>
-        <div>
-            <img src="{% static 'app_products/static/img/livro-1.png' %}" alt="livro-1">
+    <section id="produtos">
+        <div class="livros">
+            {% for book in books %}
+                <div class="livro">
+                    <figure class="livro_img">
+                        <img src="{{book.imagem.url}}" alt="{{book.title}}" class="book-img">
+                    </figure>
+                    <h5 class="title-book">{{book.title}}</h5>
+                    <p class="description">{{book.description}}</p>
+                    <a href="{% url 'product_only' book.title_slug %}"><button class="buy btn btn-success">R$ {{book.valor}}</button></a>
+                </div>
+            {% endfor %}
         </div>
-    </article>
+    </section>
 </section>
 
 {% endblock %}

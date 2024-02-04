@@ -1,0 +1,51 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-css %}{% static 'app_payment/static/css/pagamento_feito.css' %}{% endblock %}
+
+{% block e-title %}Pagamento{% endblock %}
+
+{% block e-outers %}
+
+{% endblock %}
+
+{% block e-container %}
+
+<section class="pg_concluido">
+    <h2>Pagamento realizado com sucesso</h2>
+    <div class="conteudo">
+        <p>Confira sua compra:</p>
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th>Sub-Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in pagamento.products %}
+                        <tr>
+                            <td><img class="table-img" src="{{product.image_url}}" alt="{{product.title}}"> </td>
+                            <td>{{product.title}}</td>
+                            <td>{{product.quantity}}</td>
+                            <td class="currency">R$ {{product.valor_unitario}}</td>
+                            <td class="currency">R$ {{product.subtotal}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="total">Total: R$ {{pagamento.amount}}
+            </div>
+        
+    </div>
+</section>
+
+{% endblock %}
+
+{% block e-scripts %}
+<script src="{% static 'app_payment/static/js/pagamento_feito.js' %}" type="module"></script>
+{% endblock %}

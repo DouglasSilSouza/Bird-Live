@@ -1,0 +1,232 @@
+.filters {
+  display: none;
+}
+
+.resume {
+  width: 70%;
+  height: 65vh;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+  flex-flow: column;
+  padding: 15px;
+  margin: auto;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.resume .resumecontainer {
+  display: flex;
+  gap: 15px;
+  background-color: #dcdcdc8f;
+  padding: 20px 20px 0;
+  border-radius: 5px;
+  box-shadow: 7px 5px 15px rgba(0, 0, 0, 0.1);
+  justify-content: flex-start;
+}
+
+.resume .resumecontainer figure {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  margin-right: 5px;
+  display: inline;
+}
+
+.empty {
+  margin: 15px auto;
+  color: var(--text-color);
+}
+
+#remove_cart {
+    font-size: 10rem;
+    margin: 15px auto;
+}
+
+.resume .resume-dados {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  gap: 5px;
+}
+
+.resume .dados {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.resume .resume-dados .dados .data {
+  color: #999;
+  margin: 0;
+}
+
+.resume .dados .dados-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Defina o número máximo de linhas desejado */
+  margin: 0;
+}
+
+.resume .dados .qtd {
+  display: flex;
+  gap: 0 9px;
+  border: 1px solid grey;
+  border-radius: 25px;
+  align-items: center;
+}
+
+.resume .dados .qtd .plus,
+.resume .dados .qtd .dash {
+  font-size: 0.9rem;
+  border: none;
+}
+
+.resume .dados .qtd .plus{
+  border-radius: 25px 0 0 25px;
+}
+
+.resume .dados .qtd .dash {
+  border-radius: 0 25px 25px 0;
+}
+
+.resume .book-img {
+  max-width: 5rem;
+}
+
+.resume .resumecontainer .btn-trash {
+  display: flex;
+  gap: 15px;
+  background-color: #ff00008f;
+  max-height: 0rem;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 7px 5px 15px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.resume .resumecontainer .outers {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.resume-total {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid gray;
+  gap: 15px 5px;
+  margin: 15px 0;
+  padding: 15px 0 0 0;
+  font-weight: 800;
+  font-size: 1.7rem;
+}
+
+.resume-total .total,
+.resume-total .title {
+  color: var(--text-color);
+}
+
+.top .right {
+  width: 50%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-flow: column;
+  background-color: var(--primary-color-light);
+  padding: 20px 25px 10px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.top .right .paymentcontainer {
+  height: 100%;
+  width: 100%;
+  margin-top: 15px;
+  overflow: auto;
+}
+
+.check_button {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.check_button .checkout {
+  width: 50%;
+  padding: 10px 15px;
+  background-color: var(--color-5);
+  color: #DDD;
+  border: none;
+  border-radius: 25px;
+  transition: opacity 1s ease;
+}
+
+.check_button .checkout:hover {
+  opacity: .7;
+}
+
+@media screen and (max-width: 822px) {
+
+  .resume .resumecontainer{
+    position: relative
+  }
+
+  .resume .resumecontainer .btn-trash {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+}
+
+@media screen and (max-width: 4768px) {
+  .section, .section .resume {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .resume .value {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .resume .resume-dados .dados .data, .resume .resume-dados .dados .data .valoruni {
+    display: contents;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+
+  .resumecontainer {
+    flex-direction: column;
+  }
+
+
+  /* .resume .resume-dados .dados {
+    flex-direction: column;
+  } */
+
+  .resume .resume-dados {
+    max-width: 100%;
+  }
+}

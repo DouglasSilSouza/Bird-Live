@@ -5,6 +5,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.utils.crypto import constant_time_compare
 from django.conf import settings
+from django.urls import reverse
 
 class EnvioEmail:
     def __init__(self, user):
@@ -14,7 +15,7 @@ class EnvioEmail:
         uid = urlsafe_base64_encode(force_bytes(self.user.pk))
         token = self.user.activation_token
 
-        activation_link = f'http://127.0.0.1:8000/authentication/activate/{uid}/{token}/'
+        activation_link = reverse('activate_account', kwargs={'uidb64': uid, 'token': token})
         try:
             # Enviar e-mail de ativação
             subject = 'Ative sua conta'

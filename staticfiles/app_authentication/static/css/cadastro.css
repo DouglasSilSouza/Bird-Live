@@ -166,7 +166,7 @@ p > strong > i {
     margin-right: 5px;
 }
 
-@media screen and (max-width: 415px ) {
+@media screen and (max-width: 451px ) {
     .main_login {
         flex-direction: column;
         width: 100%;
@@ -199,7 +199,7 @@ p > strong > i {
 
 }
 
-@media screen and (min-width: 416px) and (max-width: 600px ) {
+@media screen and (min-width: 452px) and (max-width: 700px ) {
     .main_login {
         flex-direction: column;
         width: 100%;
@@ -234,7 +234,7 @@ p > strong > i {
     
 }
 
-@media screen and (min-width: 601px) and (max-width: 1000px ) {
+@media screen and (min-width: 701px) and (max-width: 1000px ) {
     .main_login {
         width: 100%;
         min-height: 90rem;

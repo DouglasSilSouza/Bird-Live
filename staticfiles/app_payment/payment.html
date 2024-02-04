@@ -1,0 +1,130 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-css %}{% static 'app_payment/static/css/payment.css' %}{% endblock %}
+
+{% block e-title %}Pagamento{% endblock %}
+
+{% block e-outers %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block e-container %}
+
+<section>
+  <div class="area-payment">
+    <h2>Formas de pagamento</h2>
+    <section class="paymentcontainer">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  PIX
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">      
+                    <form id="form-pix" class="form_pix" method="post">{% csrf_token %}
+                            <div class="inputBox">
+                                <span>Nome</span>
+                                <input type="text" id="payerFirstName" name="payerFirstName" class="input" value="{{ user.first_name|default:'' }}">
+                            </div>
+                            <div class="inputBox">
+                            <span>Sobrenome</span>
+                            <input type="text" id="payerLastName" name="payerLastName" class="input" value="{{ user.last_name|default:'' }}">
+                            </div>
+                            <div class="inputBox">
+                            <span>E-mail</span>
+                            <input type="email" name="email" id="email" class="input" value="{{ user.email|default:'' }}">
+                            </div>
+                        <div class="flexbox">
+                            <div class="inputBox">
+                            <span>Tipo de documento</span>
+                            <select type="text" name="identificationType" id="identificationType" class="select">
+                                <option value="cpf" selected>CPF</option>
+                                <option value="cnpj">CNPJ</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="inputBox">
+                            <span>Número do documento</span>
+                            <input type="text" name="identificationNumber" id="identificationNumber" class="input" value="{{ user.cpf_cnpj|default:'' }}">
+                        </div>
+                        <input type="submit" value="pagar" id="form_submit" class="submit-btn">
+                    </form>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  Cartão de Crédito
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <form id="form-credit-card" class="form_credit-card" method="post">{% csrf_token %}
+                        <div class="inputBox">
+                            <span>número do cartão</span>
+                            <div id="form-checkout__cardNumber" name="form-checkout__cardNumber" class="input card-number-input"></div>
+                        </div>
+                        <div class="inputBox">
+                            <span>titular do cartão</span>
+                            <input id="form-checkout__cardholderName" name="form-checkout__cardholderName" class="input card-holder-input">
+                        </div>
+                        <div class="flexbox">
+                            <div class="inputBox">
+                              <span>expiração mm</span>
+                              <div name="month" id="form-checkout__expirationMonth" class="select month-input"></div>
+                            </div>
+                            <div class="inputBox">
+                              <span>expiração aa</span>
+                              <div name="year" id="form-checkout__expirationYear" class="select year-input"></div>
+                            </div>
+                            <div class="inputBox">
+                              <span>cvv</span>
+                              <div name="cvv" id="form-checkout__securityCode" name="form-checkout__securityCode" class="input cvv-input"></div>
+                            </div>
+                          </div>
+                      <div class="flexbox">
+                        <div class="inputBox">
+                          <span>Banco emissor</span>
+                          <select id="form-checkout__issuer" name="form-checkout__issuer" class="select"></select>
+                        </div>
+                        <div class="inputBox">
+                          <span>Parcelas</span>
+                          <select name="form-checkout__installments" id="form-checkout__installments" class="select">
+                          </select>
+                        </div>
+                        <div class="inputBox">
+                          <span>Tipo de documento</span>
+                          <select name="form-checkout__identificationType" id="form-checkout__identificationType" class="select">
+                          </select>
+                        </div>
+                      </div>
+                      <div class="inputBox">
+                        <span>Número do documento</span>
+                        <input type="text" name="form-checkout__identificationNumber" id="form-checkout__identificationNumber" class="input" value="{{ user.cpf_cnpj|default:'' }}">
+                      </div>
+                      <div class="inputBox">
+                        <span>E-mail</span>
+                        <input type="email" name="form-checkout__cardholderEmail" id="form-checkout__cardholderEmail" class="input" value="{{ user.email|default:'' }}">
+                    </div>
+                        <input hidden name="product" value="{{book.id}}">
+                      <input type="submit" value="pagar" id="form-checkout__submit" class="submit-btn">
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block e-scripts %}
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script src="{% static 'app_payment/static/js/payment.js' %}" type="module"></script>
+{% endblock %}

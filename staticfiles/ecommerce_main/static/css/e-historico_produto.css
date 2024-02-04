@@ -1,0 +1,38 @@
+.content .filters {
+    display: none;
+  }
+
+.produto{
+    background-color: rgb(234, 234, 234);
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    width: 60%;
+    margin: 15px;
+}
+
+.produto img{
+    max-width: 10rem;
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 578px) {
+    .content {
+        margin: 0;
+    }
+
+    .history {
+        margin: 15px 0 0 0;
+    }
+
+    .history h3 {
+        font-size: 1.3rem;
+    }
+
+    .produto {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        margin: 0 0 15px 0;
+    }
+}

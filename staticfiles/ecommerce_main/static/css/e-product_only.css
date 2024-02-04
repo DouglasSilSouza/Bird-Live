@@ -1,0 +1,112 @@
+.filters {
+    display: none;
+}
+
+.products {
+    display: flex;
+    gap: 25px;
+    flex-direction: row;
+    height: 60vh;
+    align-items: stretch;
+}
+
+.products .left {
+    display: flex;
+    gap: 15px;
+    width: 40%;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.products .left figure {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.products .left figure img {
+    max-width: 12rem;
+}
+
+.products .left figure figcaption {
+    text-align: center;
+}
+
+.products .rigth {
+    padding: 15px;
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.products .rigth .valores {
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.products .rigth .valores .collapse .card-body {
+    overflow: auto;
+    max-height: 12rem;
+}
+
+.products .rigth .valores .price {
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: var(--color-2);
+    text-align: end;
+}
+
+.products .rigth .buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+}
+
+.products .rigth .buttons a {
+    text-decoration: none;
+}
+
+.products .rigth .buttons button {
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 15px 7px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: transform 0.5s ease, opacity .5s ease;
+}
+
+.products .rigth .buttons button:hover {
+    transform: scale(1.05);
+    opacity: .7;
+}
+
+.products .rigth .buttons .cart {
+    background-color: var(--color-4);
+}
+
+.products .rigth .buttons a .buy {
+    background-color: var(--color-2);
+    color: #DDD;
+}
+
+@media screen and (max-width: 481px) {
+    .content .container {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .content .container .products {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .content .container .products .rigth .valores {
+        flex-direction: column-reverse;
+    }
+}

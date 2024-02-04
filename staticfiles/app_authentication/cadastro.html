@@ -1,4 +1,4 @@
-{% extends 'app_whats/base.html' %}
+{% extends 'app_main/base.html' %}
 {% load static %}
 
 {% block css %}{% static 'app_authentication/static/css/cadastro.css' %}{% endblock %}
@@ -14,7 +14,7 @@
 <div class="main_login">
     <div class="rigth_login">
         <div class="card_login">
-            <form action="{% url 'cadastro' %}" method="post" id="form">{% csrf_token %}
+            <form action="{% url 'cadastro_collaborator' %}" method="post" id="form">{% csrf_token %}
                 <h1>Cadastre-se</h1>
                 <div class="meio">
                     <div class="textfield">
@@ -50,6 +50,8 @@
                         <p style="display: none;" class="warning msg_erro" id="warning"><strong><i class="bi bi-exclamation-circle-fill"></i>{{message}}</strong></p>
                     {% endfor %}
                 {% endif %}
+
+                <input type="hidden" name="is_user" value="true">
 
                 <div class="button">
                     <input type="submit" value="Entrar" class="btn_login">

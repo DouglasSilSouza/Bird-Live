@@ -18,7 +18,7 @@ function adicionarQuebraDeLinha(event) {
 }
 
 var numeroTelefone = document.getElementById('numeroUsuario').dataset.numero;
-let chatSocket = new WebSocket('ws://' + window.location.host + '/ws/conversa/' + numeroTelefone + "/" );
+let chatSocket = new WebSocket('wss://' + window.location.host + '/ws/conversa/' + numeroTelefone + "/" );
 
 chatSocket.onopen = function(e) {
   console.log('Conexão WebSocket estabelecida.');
@@ -220,70 +220,6 @@ emojiButton.addEventListener('click', () => {
     picker = null;
   }
 });
-
-const recordButton = document.getElementById('start-button');
-const stopButton = document.getElementById('stopButton');
-const playButton = document.getElementById('playButton');
-const recordingStatus = document.getElementById('recording-status');
-const recordedAudio = document.getElementById('audioPlayer');
-
-// Variáveis para controlar a gravação e reprodução
-let mediaRecorder;
-let chunks = [];
-let isRecording = false;
-
-if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(function(stream) {
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.ondataavailable = function(e) {
-        chunks.push(e.data);
-      };
-
-      mediaRecorder.onstop = function() {
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-        recordedAudio.src = URL.createObjectURL(audioBlob);
-        recordedAudio.style.display = 'block';
-        playButton.disabled = false;
-      };
-
-      mediaRecorder.onstart = function() {
-        chunks = [];
-      };
-    })
-    .catch(function(err) {
-      console.error('Erro ao acessar o microfone: ', err);
-    });
-
-  recordButton.addEventListener('click', function() {
-    if (isRecording) {
-      stopButton.disabled = true;
-      recordButton.textContent = 'Iniciar Gravação';
-      mediaRecorder.stop();
-      recordingStatus.textContent = 'Gravação parada.';
-    } else {
-      stopButton.disabled = false;
-      recordButton.textContent = 'Parar Gravação';
-      mediaRecorder.start();
-      recordingStatus.textContent = 'Gravando...';
-    }
-
-    isRecording = !isRecording;
-  });
-
-  stopButton.addEventListener('click', function() {
-    stopButton.disabled = true;
-    recordButton.textContent = 'Iniciar Gravação';
-    mediaRecorder.stop();
-    recordingStatus.textContent = 'Gravação parada.';
-    isRecording = false;
-  });
-
-  playButton.addEventListener('click', function() {
-    recordedAudio.play();
-  });
-}
 
 function enviarMensagem() {
   

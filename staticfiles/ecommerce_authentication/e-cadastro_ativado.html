@@ -1,0 +1,18 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Conta ativado com Sucesso{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_authentication/static/css/e-cadastro_ativado.css' %}{% endblock %}
+
+{% block e-container %}
+
+    <section class="main">
+        <h3>Parabéns</h3>
+        <p>Sua conta foi ativada com sucesso!<br>Agora é Só acessar a página de login, clique no botão abaixo.</p>
+        <a href="{% url 'login_view' %}"><button type="button">Página de Login</button></a>
+    </section>
+
+{% endblock %}

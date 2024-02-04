@@ -1,0 +1,69 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}{{data.title}}{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_main/static/css/e-product_only.css' %}{% endblock %}
+
+{% block e-container %}
+<section class="products">
+    <div class="left">
+        <figure>
+            <img src="{{data.image}}" alt="{{data.title}}">
+            <figcaption>{{data.title}}</figcaption>
+        </figure>
+        
+    </div>
+    <div class="rigth">
+        <div class="product">
+            <h2>{{data.title}}</h2>
+            <p>{{data.description}}</p>
+        </div>
+        <div class="valores">
+            <div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Ver mais parcelas
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Parcelas</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table" id="parcelas">
+                                <thead>
+                                    <tr>
+                                        <th>QTD.</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="price">R$ <span id="valor">{{data.price}}</span></h2>
+            <input type="hidden" id="idproduct" value="{{data.id}}">
+            {% csrf_token %}
+        </div>
+        <div class="buttons">
+            <button class="cart" id="add-cart" {% if not user.is_authenticated %} disabled {% endif %}>ADD ao Carrinho <span class="material-symbols-outlined">add_shopping_cart</span></button>
+            <a href="#"><button class="buy">Comprar</span></button></a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block e-scripts %}
+<script src="{% static 'ecommerce_main/static/js/e-product_only.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Conta ativado com Sucesso{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_authentication/static/css/e-cadastro_ativado.css' %}{% endblock %}
+
+{% block e-container %}
+
+<section class="main">
+    <h3>OPS!</h3>
+    <p>Esse link é inválido! <br>Por favor, tente pedir um novo link clicando no botão abaixo.</p>
+    <a href="{% url 'token_erro' uidb64=uidb64 token=token %}"><button type="button">Reenviar Link</button></a>
+</section>
+
+{% for message in messages %}
+    <div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
+
+{% block e-scripts %}
+<!-- <script>
+    function reenviarLink() {
+        // Obtém a URL atual
+        var urlAtual = window.location.href;
+
+        // Utiliza expressão regular para extrair o token da URL
+        var match = urlAtual.match(/\/token_erro\/(\w+)\//);
+
+        // Verifica se houve correspondência
+        if (match) {
+            var token = match[1];
+
+            window.location.href = 'authentication/token_erro/' + token + '/';
+        } else {
+            alert('Token não encontrado na URL.');
+        }
+    }
+</script> -->
+{% endblock %}

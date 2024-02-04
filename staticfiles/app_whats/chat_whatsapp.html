@@ -1,4 +1,4 @@
-{% extends 'app_whats/base.html' %}
+{% extends 'app_main/base.html' %}
 {% load static %}
 
 {% block css %}{% static 'app_whats/static/css/chat_whatsapp.css' %}{% endblock %}
@@ -80,21 +80,10 @@
                                 <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
                                 <img src="data:{{ mensagem.files.file_type }};base64,{{ mensagem.files.file_message }}" class="imagem_destinatario" alt="Imagem">
                             </div>
-                            {% elif mensagem.files.files_type == 'audio' %}
-                            <div class="message">
-                                <span class="time_message">{{ mensagem.data_hora_message|time:"H:i"}}</span>
-                                <button id="stopButton"><i class="fa-solid fa-circle-pause"></i></button>
-                                <button id="playButton"><i class="fa-solid fa-circle-play"></i></button>
-                                
-                                <audio src="" id="audioPlayer" controls></audio>
-                            </div>
                             {% endif %}
 
                         {% endif %}
                     {% endfor %}
-
-                    <button id="stopButton"><i class="fa-solid fa-circle-pause"></i></button>
-                    <button id="playButton"><i class="fa-solid fa-circle-play"></i></button>
 
                     <!-- <div class="message digitando">
                     <div class="typing typing-1"></div>

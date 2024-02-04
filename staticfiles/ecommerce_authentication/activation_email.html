@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ative Sua Conta</title>
+</head>
+<body>
+    <p>Olá {{ user.first_name }},</p>
+    <p>Seu cadastro foi realizado com sucesso! Clique no link abaixo para ativar sua conta:</p>
+    <a href="{{ activation_link }}"><button style="border: none;
+        border-radius: 25px;
+        background-color: var(--color-5);
+        color: #DDD;
+        padding: 10px 15px;
+        width: 30%;
+        transition: opacity 1s ease;">Ativar Conta</button></a>
+    <p>Se você não solicitou este cadastro, ignore este e-mail.</p>
+</body>
+</html>
