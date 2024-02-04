@@ -24,18 +24,18 @@ def login_view(request):
         else:
             user = authenticate(email=email, password=password)
 
-            if user.is_active:
-                if user is not None:
+            if user is not None:
+                if user.is_active:
                     login(request, user)
                     if user.is_colaborador:
                         return redirect('home')  # Use o nome da rota diretamente
                     else:
                         return redirect('e-home')  # Use o nome da rota diretamente
                 else:
-                    messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.', extra_tags='error')
+                    url = reverse('reenviar_token')
+                    messages.error(request, f"Cadastro não ativado! Verifique seu E-mail para continuar ou <a href='{url}'>clique aqui</a> para reenviar.", extra_tags='error')
             else:
-                url = reverse('reenviar_token')
-                messages.error(request, f"Cadastro não ativado! Verifique seu E-mail para continuar ou <a href='{url}'>clique aqui</a> para reenviar.", extra_tags='error')
+                messages.error(request, 'Senha inválida ou usuario não existe. Por favor, tente novamente.', extra_tags='error')
     return render(request, 'ecommerce_authentication/e-login.html')  # Substitua 'seu_template.html' pelo nome correto do seu template
 
 def login_view_colab(request):
