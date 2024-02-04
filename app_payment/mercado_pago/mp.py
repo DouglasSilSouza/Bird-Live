@@ -1,7 +1,6 @@
 from ecommerce_main.products.getproducts import GetProducts
 import requests
 import json
-import os
 
 from dls_empresa.variaveis import get_secret
 variavel = get_secret()

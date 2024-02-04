@@ -11,7 +11,6 @@ from dls_empresa.variaveis import get_secret
 from datetime import datetime
 import traceback
 import json
-import os
 
 variavel = get_secret()
 
