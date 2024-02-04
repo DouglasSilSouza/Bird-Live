@@ -8,7 +8,6 @@ from ecommerce_cart.models import Carrinho, ItemCarrinho
 from app_payment.models import Payments
 from django.urls import reverse
 from dls_empresa.variaveis import get_secret
-from dotenv import load_dotenv
 from datetime import datetime
 import traceback
 import json
@@ -20,9 +19,6 @@ from .mercado_pago.mp import MercadoPago
 
 import mercadopago
 sdk = mercadopago.SDK(variavel["MP_TOKEN"])
-
-# Load the stored environment variables
-load_dotenv()
 
 def status_rected_pay(data):
     match data:
