@@ -207,7 +207,7 @@ def cadastro_usuario(request):
             except Exception as e:
                 print(f"Error: {e}")
                 messages.error(request, "Erro ao realizar o cadastro!", extra_tags='error')
-                return redirect(reverse('cadastro_usuario'))
+                return redirect(reverse('cadastro_user'))
     return render(request, 'ecommerce_authentication/e-cadastro.html')
 
 def cadastro_ativado_sucesso(request, uidb64, token):
