@@ -18,6 +18,8 @@ DEBUG = variavel['DJANGO_DEBUG'] != 'False'
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1' 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
 
+SECURE_SSL_REDIRECT = True
+
 #CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
 # Application definition
