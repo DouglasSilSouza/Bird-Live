@@ -150,6 +150,7 @@
             <div class="infos">
                 <h3>Histórico de Compras</h3>
                 <div class="envelopado">
+                    {% if pagamentos %}
                     <table class="table table-sm">
                         <thead>
                             <tr>
@@ -170,6 +171,9 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    {% else %}
+                    <h2>Nenhuma compra realizada</h2>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,0 +1,55 @@
+.content .filters {
+  display: none;
+}
+
+.main {
+  background-color: var(--color-1);
+  border-radius: 15px;
+  margin: 15px auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main h3 {
+  color: #ddd;
+}
+.main form .input {width: 60%;}
+
+.main form .input label {
+    color: #DDD;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.main form .input input {
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    padding: 10px 15px;
+}
+
+.main form {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.main form .submit {
+  border: none;
+  border-radius: 25px;
+  background-color: var(--color-5);
+  color: #ddd;
+  padding: 10px 15px;
+  width: 30%;
+  transition: opacity 1s ease;
+}
+
+.main form .submit:hover {
+  opacity: 0.6;
+}

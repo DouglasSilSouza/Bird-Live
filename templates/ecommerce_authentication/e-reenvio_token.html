@@ -1,0 +1,29 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-title %}Reenviar e-mail{% endblock %}
+
+{% block e-outers %}{% endblock %}
+
+{% block e-css %}{% static 'ecommerce_authentication/static/css/e-reenvio_token.css' %}{% endblock %}
+
+{% block e-container %}
+<section class="main">
+    <h3>Digite seu E-mail abaixo</h3>
+    <form action="{% url 'reenviar_token' %}" method="post">{% csrf_token %}
+        <div class="input">
+            <label for="email">E-mail</label><br>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail">
+        </div>
+        <input type="submit" class="submit" value="Enviar">
+    </form>
+</section>
+{% for message in messages %}
+    <div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+{% endfor %}
+{% endblock %}

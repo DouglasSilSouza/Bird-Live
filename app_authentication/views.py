@@ -1,13 +1,14 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
-from django.contrib.auth.forms import SetPasswordForm
 from .login_required_message import login_required_message_and_redirect
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.hashers import make_password
+from django.utils.crypto import get_random_string
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from django.core.mail import EmailMessage
-from django.urls import reverse
+from .enviar_email import EnvioEmail
 from django.contrib import messages
-from django.conf import settings
+from django.utils import timezone
+from django.urls import reverse
 from .models import Cadastro
 import re
 
@@ -23,32 +24,19 @@ def login_view(request):
         else:
             user = authenticate(email=email, password=password)
 
-            if user is not None:
-                login(request, user)
-                if user.is_colaborador:
-                    return redirect('home')  # Use o nome da rota diretamente
+            if user.is_active:
+                if user is not None:
+                    login(request, user)
+                    if user.is_colaborador:
+                        return redirect('home')  # Use o nome da rota diretamente
+                    else:
+                        return redirect('e-home')  # Use o nome da rota diretamente
                 else:
-                    return redirect('e-home')  # Use o nome da rota diretamente
+                    messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.', extra_tags='error')
             else:
-                messages.error(request, 'Credenciais inválidas. Por favor, tente novamente.', extra_tags='error')
+                url = reverse('reenviar_token')
+                messages.error(request, f"Cadastro não ativado! Verifique seu E-mail para continuar ou <a href='{url}'>clique aqui</a> para reenviar.", extra_tags='error')
     return render(request, 'ecommerce_authentication/e-login.html')  # Substitua 'seu_template.html' pelo nome correto do seu template
-
-def enviar_email(email):
-    dados = Cadastro.objects.filter(email=email).first()
-    mensagem = "E-mail Teste"
-    try:
-        mail = EmailMessage(subject=dados.first_name, body=mensagem,
-                                from_email=settings.EMAIL_HOST_USER,
-                                to=[email])
-        mail.send()
-        status = "success"
-        text = "Caso Exista esse E-mail em nossas bases verifique sua caixa de entrada, foi enviado uma mensagem para o E-mail fornecido!"
-    except Exception as e:
-        print(e)
-        status = "error"
-        text = "Erro ao enviar E-mail"
-        print(text)
-    return status, text
 
 def login_view_colab(request):
     if request.method == "POST":
@@ -157,7 +145,7 @@ def cadastro_usuario(request):
         is_user_string = request.POST.get('is_user')
         is_user = bool(is_user_string)
 
-        user_bd = Cadastro.objects.filter(email=email)
+        user_bd = Cadastro.objects.filter(email=email).first()
 
         if not (nome, email, sobrenome, password, conf_password):
             messages.error(request, "Possui algum campo em branco!", extra_tags="error")
@@ -189,28 +177,87 @@ def cadastro_usuario(request):
 
             # Removendo os parênteses e traço
             telefone_limpo = re.sub(r'[()-]', '', telefone)
-            
-            user = Cadastro(
-                email=email,
-                username=nome,
-                first_name=nome,
-                last_name=sobrenome,
-                password=make_password(password),
-                is_active = True,
-                code_area = ddd,
-                phone = telefone_limpo,
-                type_document = documento,
-                cpf_cnpj = num_documento,
-                date_birthday = nascimento,
-                cep = cep,
-                endereco = endereco,
-                number = numero,
-                is_colaborador = is_colaborador
-            )
-            user.save()
-            messages.success(request, "Usuario cadastrado com sucesso!", extra_tags="success")
-            return redirect(reverse('login_view'))
+            try:
+                user = Cadastro(
+                    email=email,
+                    username=nome,
+                    first_name=nome,
+                    last_name=sobrenome,
+                    password=make_password(password),
+                    code_area = ddd,
+                    phone = telefone_limpo,
+                    type_document = documento,
+                    cpf_cnpj = num_documento,
+                    date_birthday = nascimento,
+                    cep = cep,
+                    endereco = endereco,
+                    number = numero,
+                    is_colaborador = is_colaborador,
+                    activation_token = get_random_string(length=32),
+                    activation_token_created_at = timezone.now()
+                )
+                user.save()
+
+                env = EnvioEmail(user).enviandoEmail()
+                if env:
+                    messages.success(request, "Usuario cadastrado com sucesso!<br>Agora Verifique sua Caixa de Entrada para concluir seu cadastro ativando um LInk enviado em seu e-mail informado.", extra_tags="success")
+                else:
+                    messages.error(request, "Não foi possível enviar o e-mail de ativação, por favor tente novamente mais tarde!<br>Lembrando que seu cadastro foi registrado com sucesso!")
+                return redirect(reverse('login_view'))
+            except Exception as e:
+                print(f"Error: {e}")
+                messages.error(request, "Erro ao realizar o cadastro!", extra_tags='error')
+                return redirect(reverse('cadastro_usuario'))
     return render(request, 'ecommerce_authentication/e-cadastro.html')
+
+def cadastro_ativado_sucesso(request, uidb64, token):
+    return render(request, 'ecommerce_authentication/e-cadastro_ativado.html')
+
+def cadastro_ativacao_erro(request, uidb64, token):
+    return render(request, 'ecommerce_authentication/e-cadastro_error.html', {"uidb64": uidb64, "token": token})
+
+def reenviar_token(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = get_object_or_404(Cadastro, email=email)
+            env = EnvioEmail(user).enviandoEmail()
+            if env:
+                messages.success(request, 'Enviado e-mail com sucesso! verifique sua caixa de entrada.', extra_tags='success')
+            else:
+                messages.error(request, "Não foi possível enviar e-mail agora, tente novamente mais tarde!", extra_tags='error')
+        except Cadastro.DoesNotExist:
+            url = reverse('cadastro_usuario')
+            messages.error(request, f"Nenhum E-mail encontrado em nossas bases!<br>Realize seu cadastro <a href='{url}'>clicando aqui</a>.", extra_tags='error')
+        except Exception as e:
+            print(e)
+    return render(request, 'ecommerce_authentication/e-reenvio_token.html')
+
+def token_erro(request, uidb64, token):
+    try:
+        user = get_user_model().objects.get(activation_token=token)
+        user.activation_token = get_random_string(length=32)
+        user.activation_token_created_at = timezone.now()
+        user.save()
+        EnvioEmail(user).enviandoEmail()
+        messages.success(request, "E-mail reenviado!<br>Agora Verifique sua Caixa de Entrada para concluir seu cadastro ativando um LInk enviado em seu e-mail informado.", extra_tags="success")
+        return redirect(reverse('login_view'))
+    except get_user_model().DoesNotExist:
+        print("modelo ou usuario não encontrado")
+    except Exception as e:
+        print("Error: ", e)
+
+def ativando_conta(request, uidb64, token):
+    try:
+        user = get_object_or_404(Cadastro, activation_token=token)
+        func = EnvioEmail(user).activate_account(uidb64, token)
+        if func:
+            return redirect('cadastro_sucesso', uidb64=uidb64, token=token)
+        else:
+            return redirect('cadastro_erro', uidb64=uidb64, token=token)
+    except Cadastro.DoesNotExist:
+        messages.error(request, "nenhum Usúario com encontrado, por favor verifique!")
+        return redirect('cadastro_ativado_erro')
 
 @login_required_message_and_redirect(login_url='login_view')
 def configuracoes(request):

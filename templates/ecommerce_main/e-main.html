@@ -13,7 +13,7 @@
     <div class="product" id="product-{{dados.id}}">
         <img src="{{dados.image}}" alt="{{dados.title}}">
         <h3 class="limited">{{dados.title}}</h3>
-        <a href="{% url 'productonly' dados.id %}"><button>R$ {{dados.price}}</button></a>
+        <a href="{% url 'productonly' dados.id %}"><button class="btnPrice">R$ {{dados.price}}</button></a>
     </div>
     {% endfor %}
 </div>

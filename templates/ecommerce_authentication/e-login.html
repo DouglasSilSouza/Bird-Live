@@ -18,6 +18,15 @@
     </button>
 </a>
 
+{% for message in messages %}
+    <div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+{% endfor %}
+
 <section class="area-login">
     <div class="left">
         <img src="{% static 'ecommerce_authentication/static/img/Login-ecommerce.png' %}" alt="Login">
@@ -39,14 +48,6 @@
     </div>
 </section>
 <br>
-{% for message in messages %}
-    <div class="container-fluid p-0">
-    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    </div>
-{% endfor %}
 
 {% endblock %}
 

@@ -46,5 +46,40 @@ function navBar() {
   });
 }
 
+function filtros() {
+  const maisCem = document.querySelector('.maisCem'),
+    menosCem = document.querySelector('.menosCem'),
+    product = document.querySelectorAll('.product'),
+    limpar = document.querySelector('.clean');
+
+  product.forEach(item => {
+    const btnPrice = item.querySelector('.btnPrice');
+    const valorNumerico = parseFloat(btnPrice.textContent.replace("R$ ", "").replace(",", "."));
+
+    maisCem.addEventListener('click', () => {
+      if (valorNumerico <= 100) {
+        item.classList.add('esconder');
+      } else {
+        item.classList.remove('esconder')
+      }
+    });
+
+    menosCem.addEventListener('click', () => {
+      if (valorNumerico >= 100) {
+        item.classList.add('esconder');
+      }else {
+        item.classList.remove('esconder')
+      }
+    });
+
+    limpar.addEventListener('click', () => {
+      product.forEach(item => {
+        item.classList.remove('esconder');
+      });
+    });
+  });
+}
+
+filtros();
 navBar();
 countCart();

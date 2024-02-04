@@ -5,8 +5,7 @@ from ecommerce_cart.models import Carrinho, ItemCarrinho
 from app_authentication.models import Cadastro
 from app_payment.models import Payments
 from .products.getproducts import GetProducts
-from django.http import JsonResponse
-from django.urls import reverse_lazy
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db.models import Sum
@@ -24,6 +23,8 @@ async def base(request):
         return JsonResponse({"quantity": quantidade})
     except Carrinho.DoesNotExist:
         return JsonResponse({"quantity": 0})
+    except Cadastro.DoesNotExist:
+        return HttpResponse(None)
 
 def home(request):
     data = GetProducts().get_products()
@@ -124,6 +125,7 @@ def historico_compras(request):
         pass
     return render(request, "ecommerce_main/e-dados_pessoais.html", {"pagamentos": pagamentos})
 
+@login_required_message_and_redirect(login_url='login_view')
 def prod_historico_compra(request, id_payment):
     try:
         history = Payments.objects.filter(id_payment=id_payment).first()
