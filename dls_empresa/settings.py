@@ -17,6 +17,7 @@ SECRET_KEY =  variavel["SECRET_KEY"]
 DEBUG = variavel['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
+SECURE_SSL_REDIRECT = False
 
 #CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
