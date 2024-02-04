@@ -165,7 +165,7 @@ def cadastro_usuario(request):
         elif len(sobrenome) <= 3:
             messages.error(request, "Sobrenome Inválido!", extra_tags="error")
             #return JsonResponse({"message": "Sobrenome Inválido!", "status": 400})
-        elif user_bd.exists():
+        elif user_bd is not None:
             messages.error(request, "Usuário já cadastrado!", extra_tags="error")
             #return JsonResponse({"message": "Usuário já cadastrado!", "status": 400}) 
         elif not (telefone, documento, num_documento, sexo, endereco, numero, cep, nascimento):
