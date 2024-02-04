@@ -14,10 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY =  variavel["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = variavel['DJANGO_DEBUG'] != 'False'
+DEBUG = variavel['DJANGO_DEBUG']
 
-ALLOWED_HOSTS = ['*']
-print(ALLOWED_HOSTS)
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
 
 #CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
