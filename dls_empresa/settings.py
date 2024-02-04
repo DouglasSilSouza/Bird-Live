@@ -16,11 +16,8 @@ SECRET_KEY =  variavel["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = variavel['DJANGO_DEBUG'] != 'False'
 
-print(DEBUG)
-
 ALLOWED_HOSTS = ['*']
-
-#SECURE_SSL_REDIRECT = True
+print(ALLOWED_HOSTS)
 
 #CSRF_TRUSTED_ORIGINS = [f'https://{host}']
 
