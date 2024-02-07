@@ -1,9 +1,10 @@
-from django.contrib.auth import get_user_model
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.crypto import constant_time_compare
+from django.template.loader import render_to_string
+from django.contrib.auth import get_user_model
+from django.core.mail import EmailMessage
 from django.conf import settings
 from django.urls import reverse
 
@@ -15,11 +16,17 @@ class EnvioEmail:
         uid = urlsafe_base64_encode(force_bytes(self.user.pk))
         token = self.user.activation_token
 
+        current_site = get_current_site()
+
+        scheme = 'https' if getattr(settings, 'USE_HTTPS', False) else 'http'
+        site_name = current_site.domain
+
         activation_link = reverse('activate_account', kwargs={'uidb64': uid, 'token': token})
+        absolute_activation_link = f"{scheme}://{site_name}{activation_link}"
         try:
             # Enviar e-mail de ativação
             subject = 'Ative sua conta'
-            html_message = render_to_string('ecommerce_authentication/activation_email.html', {'user': self.user, 'activation_link': activation_link})
+            html_message = render_to_string('ecommerce_authentication/activation_email.html', {'user': self.user, 'activation_link': absolute_activation_link})
             email = EmailMessage(subject, html_message, settings.EMAIL_HOST_USER, [self.user.email])
             email.content_subtype = 'html'
             email.send()
