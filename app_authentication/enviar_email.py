@@ -1,9 +1,9 @@
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.crypto import constant_time_compare
 from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.urls import reverse
@@ -16,11 +16,14 @@ class EnvioEmail:
         uid = urlsafe_base64_encode(force_bytes(self.user.pk))
         token = self.user.activation_token
 
-        current_site = get_current_site()
+        # Use o objeto Site fornecido ou obtenha o objeto Site atual
+        current_site = Site.objects.get_current()
 
+        # Obtenha o esquema (http ou https) e o nome do site das configurações do Django
         scheme = 'https' if getattr(settings, 'USE_HTTPS', False) else 'http'
         site_name = current_site.domain
 
+        # Gere o link de ativação absoluto
         activation_link = reverse('activate_account', kwargs={'uidb64': uid, 'token': token})
         absolute_activation_link = f"{scheme}://{site_name}{activation_link}"
         try:
