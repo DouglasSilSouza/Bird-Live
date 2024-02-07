@@ -1,6 +1,10 @@
 import boto3
 import json
 from botocore.exceptions import ClientError
+import dotenv
+import os
+
+dotenv.load_dotenv()
 
 def get_secret():
     secret_name = "bird-live"
@@ -11,8 +15,8 @@ def get_secret():
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name,
-        # aws_access_key_id=os.getenv("aws_access_key_id"),
-        # aws_secret_access_key=os.getenv("aws_secret_access_key"),
+        aws_access_key_id=os.getenv("aws_access_key_id"),
+        aws_secret_access_key=os.getenv("aws_secret_access_key"),
     )
 
     try:
@@ -26,4 +30,3 @@ def get_secret():
 
     secret = get_secret_value_response['SecretString']
     return json.loads(secret)
-

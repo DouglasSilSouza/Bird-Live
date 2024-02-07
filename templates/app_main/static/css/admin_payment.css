@@ -1,0 +1,43 @@
+.container {
+    background-color: var(--sidebar-color);
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-evenly;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px #00000056;
+    outline: none;
+    box-sizing: border-box;
+    border-bottom: none;
+    padding: 15px;
+}
+
+.container .dataTables_wrapper {
+    width: 100%;
+}
+
+
+.container .table tr .title {
+    text-align: center;
+    font-size: 1.5rem;
+    padding-top: 15px;
+}
+
+.prod {
+    overflow: auto;
+    max-height: 10vh;
+}
+
+.produto{
+    background-color: rgb(234, 234, 234);
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    width: 100%;
+    margin: 0 0 15px 0;
+}
+
+.produto img{
+    max-height: 3rem;
+    margin-right: 10px;
+}

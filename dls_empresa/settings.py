@@ -106,6 +106,20 @@ DATABASES={
     }
 }
 
+# DATABASES={
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": 'dls_empresa',
+#         "USER": 'root',
+#         "PASSWORD": '',
+#         "HOST": 'localhost',
+#         "PORT": '3306',
+#         "OPTIONS": {
+#             'sql_mode': 'STRICT_ALL_TABLES',
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -145,13 +159,14 @@ DEFAULT_CHARSET = 'utf-8'
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/templates/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'templates')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #Location of static files
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'templates'),
     os.path.join(BASE_DIR, 'staticfiles'),
 ]
 
@@ -174,3 +189,6 @@ EMAIL_HOST_USER = variavel["ENVIOS_EMAIL"]
 EMAIL_HOST_PASSWORD = variavel["SENHA_GOOGLE"]
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+THOUSAND_SEPARATOR='.',
+USE_THOUSAND_SEPARATOR=True

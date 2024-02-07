@@ -1,0 +1,26 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_main/static/css/inicio.css' %}{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block outers %}
+{% endblock %}
+
+{% block body %}
+<section class="container">
+    <div class="card total">
+        <h2>Total</h2>
+        <p>Total arrecadado no último mês</p>
+        <h5>R$ {{pays|floatformat:2}}</h5>
+    </div>
+    <div class="card cadastros">
+        <h2>Cadastros</h2>
+        <p>Quantidade total de cadastros</p>
+        <h5>{{users}}</h5>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}{% endblock %}

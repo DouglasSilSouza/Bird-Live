@@ -1,0 +1,52 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_main/static/css/admin_payments.css' %}{% endblock %}
+
+{% block title %}Carrinhos{% endblock %}
+
+{% block outers %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+{% endblock %}
+{% block body %}
+<section class="container">
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>CPF/CNPJ</th>
+                <th>Data compra</th>
+                <th>Status</th>
+                <th>Método Pag.</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pay in pays %}
+            <tr>
+                <td><a href="{% url 'pagamento' pay.id %}">{{pay.id}}</a></td>
+                <td>{{pay.user.first_name}} {{pay.user.last_name}}</td>
+                <td>{{pay.user.cpf_cnpj}}</td>
+                <td>{{pay.date_created|date:'d/m/Y'}}</td>
+                <td>{{pay.status_detail}}</td>
+                <td>{{pay.payment_method_id|capfirst}}</td>
+                <td>R$ {{pay.amount|floatformat:2}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+    new DataTable('#myTable', {
+        language: {
+            url: 'https:////cdn.datatables.net/plug-ins/1.13.7/i18n/pt-BR.json'
+        }
+    });
+</script>
+{% endblock %}

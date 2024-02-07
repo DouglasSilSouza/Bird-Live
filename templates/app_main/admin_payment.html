@@ -1,0 +1,77 @@
+{% extends 'app_main/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'app_main/static/css/admin_payment.css' %}{% endblock %}
+
+{% block title %}Produto {{pay.id}} {% endblock %}
+
+{% block outers %}
+{% endblock %}
+
+{% block body %}
+<section class="container">
+    <table id="tableUser" class="table">
+        <thead>
+            <tr><th class="title" colspan="5">Dados Cadastrais</th></tr>
+            <tr>
+                <th>Nome</th>
+                <th>CPF/CNPJ</th>
+                <th colspan="2">Endereço</th>
+                <th>Número</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{pay.user.first_name}} {{pay.user.last_name}}</td>
+                <td>{{pay.user.cpf_cnpj}}</td>
+                <td colspan="2">{{pay.user.endereco}}</td>
+                <td>{{pay.user.number}}</td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr><th class="title" colspan="5">Detalhes da Compra</th></tr>
+            <tr>
+                <th>Data Compra</th>
+                <th>Data Aprovação</th>
+                <th>Data da ùltima Aprovação</th>
+                <th>Status</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{pay.date_created|date:'d/m/Y H:i'}}</td>
+                <td>{{pay.date_approved|date:'d/m/Y H:i'}}</td>
+                <td>{{pay.date_last_updated|date:'d/m/Y H:i'}}</td>
+                <td>{{pay.status_payment}}</td>
+                <td>{{pay.status_detail}}</td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr><th class="title" colspan="5">Produtos da Compra</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="prod" colspan="5">
+                    {% for prod in pay.products %}
+                    <div class="produto">
+                        <img src="{{prod.image_url}}" alt="prod.title">
+                        <div class="dados">
+                            <h5>{{prod.title}}</h5>
+                            <p>Quantidade: {{prod.quantity}}</p>
+                            <p>Valor unitário: R$ {{prod.valor_unitario|floatformat:2}}</p>
+                            <p>Subtotal: R$ {{prod.subtotal|floatformat:2}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</section>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'app_main/static/js/admin_payment.js' %}"></script>
+{% endblock %}

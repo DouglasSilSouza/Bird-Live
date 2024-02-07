@@ -11,7 +11,7 @@
   /* ===== Colors ===== */
   --body-color: #E4E9F7;
   --sidebar-color: #FFF;
-  --primary-color: #ccb7b7;
+  --primary-color: #dadada;
   --primary-color-light: #F6F5FF;
   --toggle-color: #DDD;
   --text-color: #707070;
@@ -46,7 +46,7 @@ body.dark{
   --primary-color-light: #3a3b3c;
   --toggle-color: #393939;
   --text-color: #ccc;
-  --text-title: #e4e4e4;
+  --text-title: #919191;
   --hover-color: #66b0ff;
   --selected-color: #007bff;
 }
