@@ -1,322 +1,72 @@
-// Função que faz a solicitação AJAX
-function obterChavePublica() {
-  return new Promise(function (resolve, reject) {
-    fetch("/payments/endpoints_api/", {
-      method: "get",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-      })
-      .then((data) => {
-        let publicKey = data.public_key,
-          total = data.total,
-          infoProdutos = data.infoProdutos;
-        resolve({ publicKey, total, infoProdutos }); // Resolve a promessa com a chave pública
-      })
-      .catch((error) => {
-        reject("Erro ao obter a chave pública."); // Rejeita a promessa em caso de erro
-      });
-  });
-}
+import { payPix } from "./metodo_pix.js";
+import {  getCardBrand, enviarProdutos } from "./metodo_cartao.js";
 
-const CSRFToken = document.querySelector(
-  'input[name="csrfmiddlewaretoken'
-).value;
+const cardElements = document.querySelectorAll(".nav-link");
 
-let notification = [];
-// Função assíncrona para carregar o MercadoPago e criar o objeto
-async function inicializarMercadoPago() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { publicKey, total, infoProdutos } = await obterChavePublica();
-      const mp = new window.MercadoPago(publicKey);
-
-      const cardForm = mp.cardForm({
-        amount: total,
-        iframe: true,
-        form: {
-          id: "form-credit-card",
-          cardNumber: {
-            id: "form-checkout__cardNumber",
-            placeholder: "Número do cartão",
-          },
-          expirationMonth: {
-            id: "form-checkout__expirationMonth",
-            placeholder: "MM",
-          },
-          expirationYear: {
-            id: "form-checkout__expirationYear",
-            placeholder: "YY",
-          },
-          securityCode: {
-            id: "form-checkout__securityCode",
-            placeholder: "Código de segurança",
-          },
-          cardholderName: {
-            id: "form-checkout__cardholderName",
-            placeholder: "Titular do cartão",
-          },
-          issuer: {
-            id: "form-checkout__issuer",
-            placeholder: "Banco emissor",
-          },
-          installments: {
-            id: "form-checkout__installments",
-            placeholder: "Parcelas",
-          },
-          identificationType: {
-            id: "form-checkout__identificationType",
-            placeholder: "Tipo de documento",
-          },
-          identificationNumber: {
-            id: "form-checkout__identificationNumber",
-            placeholder: "Número do documento",
-          },
-          cardholderEmail: {
-            id: "form-checkout__cardholderEmail",
-            placeholder: "E-mail",
-          },
-        },
-        callbacks: {
-          onFormMounted: (error) => {
-            if (error)
-              return console.warn("Form Mounted handling error: ", error);
-          },
-          onSubmit: (event) => {
-            event.preventDefault();
-
-            const {
-              paymentMethodId: payment_method_id,
-              issuerId: issuer_id,
-              cardholderEmail: email,
-              amount,
-              token,
-              installments,
-              identificationNumber,
-              identificationType,
-            } = cardForm.getCardFormData();
-
-            const options = {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": CSRFToken,
-              },
-              body: JSON.stringify({
-                token,
-                issuer_id,
-                payment_method_id,
-                transaction_amount: Number(amount),
-                installments: Number(installments),
-                description: infoProdutos,
-                payer: {
-                  email,
-                  identification: {
-                    type: identificationType,
-                    number: identificationNumber,
-                  },
-                },
-              }),
-            };
-
-            fetch("/payments/process_payment/", options)
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-              })
-              .then((data) => {
-                switch (data.code) {
-                  case 200:
-                    window.location.href = "/payments/pagamento_concluido/";
-                    break;
-                  case 400:
-                    Toast.fire({
-                      icon: "error",
-                      title: `${data.message}`,
-                    });
-                    break;
-                  default:
-                    Toast.fire({
-                      icon: "error",
-                      title: `${data.error}`,
-                    });
-                    break;
-                }
-              })
-              .catch((error) => {
-                Toast.fire({
-                  icon: "error",
-                  title: "Erro ao enviar dados: " + error,
-                });
-              });
-          },
-        },
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 10000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
-
-// Função assíncrona para carregar o MercadoPago e criar o objeto
-async function inicializarMercadoPagoPIX() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { publicKey, total, infoProdutos } = await obterChavePublica();
-      const mp = new window.MercadoPago(publicKey);
-
-      (async function getIdentificationTypes() {
-        try {
-          const identificationTypes = await mp.getIdentificationTypes();
-          const identificationTypeElement =
-            document.getElementById("identificationType");
-
-          createSelectOptions(identificationTypeElement, identificationTypes);
-        } catch (e) {
-          return console.error("Error getting identificationTypes: ", e);
-        }
-      })();
-
-      function createSelectOptions(
-        elem,
-        options,
-        labelsAndKeys = { label: "name", value: "id" }
-      ) {
-        const { label, value } = labelsAndKeys;
-
-        elem.options.length = 0;
-
-        const tempOptions = document.createDocumentFragment();
-
-        options.forEach((option) => {
-          const optValue = option[value];
-          const optLabel = option[label];
-
-          const opt = document.createElement("option");
-          opt.value = optValue;
-          opt.textContent = optLabel;
-
-          tempOptions.appendChild(opt);
-        });
-
-        elem.appendChild(tempOptions);
+function toggleCard(element) {
+  element.addEventListener("click", () => {
+    cardElements.forEach((card) => {
+      if (card !== element) {
+        card.classList.remove("active");
+        const targetId = card.getAttribute("data-target");
+        const targetElement = document.getElementById(targetId);
+        targetElement.classList.add("oculto");
       }
-      resolve();
-    } catch (error) {
-      reject(error);
+    });
+
+    const targetId = element.getAttribute("data-target");
+    const targetElement = document.getElementById(targetId);
+
+    if (!element.classList.contains("active")) {
+      element.classList.add("active");
+      targetElement.classList.remove("oculto");
+
+      switch (targetId) {
+        case "bodypix":
+          const closedivpix = targetElement.querySelector(".close"),
+            opendivpix = targetElement.querySelector(".open"),
+            tryBtn = closedivpix.querySelector(".trypix");
+          closedivpix.classList.add("oculto");
+          opendivpix.classList.remove("oculto");
+          if (tryBtn) {
+            tryBtn.addEventListener("click", () => {
+              payPix(opendivpix, closedivpix);
+            });
+          }
+          payPix(opendivpix, closedivpix);
+          break;
+
+        case "bodycartao":
+          limitarCaracteres(targetElement);
+          enviarProdutos()
+          const cardNumber = document.querySelector("#cardnumber");         
+          cardNumber.addEventListener('input', async function() {
+            if (cardNumber.value.replace(/\s/g, "") >= 16){
+              const numeroDoCartao = cardNumber.value.replace(/\s/g, "").toString();
+              await getCardBrand(numeroDoCartao);
+            }
+          });
+          break;
+      }
+    } else {
+      element.classList.remove("active");
+      targetElement.classList.add("oculto");
     }
   });
 }
 
-async function data_qrcode() {
-  const btn = document.querySelector("#form-pix");
+function limitarCaracteres(element) {
+  var paragrafos = element.querySelectorAll(".tituloprod");
+  var limiteCaracteres = 20;
 
-  const { publicKey, total, infoProdutos } = await obterChavePublica();
-
-  const options = {
-    method: "POST", // Método HTTP que você deseja usar (neste caso, POST)
-    headers: {
-      "Content-Type": "application/json", // Tipo de conteúdo sendo enviado (JSON neste exemplo)
-      "X-CSRFToken": CSRFToken,
-    },
-    body: JSON.stringify({
-      payment_method_id: "pix",
-      transaction_amount: Number(total),
-      description: infoProdutos,
-    }), // Converte os dados para JSON e os coloca no corpo da requisição
-  };
-
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-
-    fetch("/payments/process_payment/", options)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
-      })
-      .then((data) => {
-        switch (data.code) {
-          case 200:
-            Swal.showLoading();
-            Swal.fire({
-              icon: "info",
-              title: `Pagamento via QR Code`,
-              html: `<img src="data:image/jpeg;base64,${data.data.qrcode_base64}" alt="" style="width: 15rem;" />`,
-              input: "text",
-              inputLabel: "Código PIX copia e cola",
-              inputValue: data.data.qrcode,
-              confirmButtonText: "Copiar",
-              confirmButtonColor: "#3085d6",
-              showCancelButton: true,
-              cancelButtonColor: "#d33",
-              cancelButtonText: "Cancelar",
-              allowOutsideClick: false, // Evita que o modal seja fechado ao clicar fora dele
-              showCloseButton: true, // Exibe um botão de fechamento no modal
-              customClass: {
-                container: "my-swal", // Classe CSS personalizada para o container do modal
-              },
-              // Adicione o evento de copiar ao clicar no botão "Copiar"
-              preConfirm: function () {
-                document.querySelector("#swal2-input").select();
-                document.execCommand("copy");
-                // Use Swal.showValidationMessage para exibir a notificação sem fechar o modal
-                Swal.showValidationMessage(
-                  "O código PIX foi copiado para a área de transferência."
-                );
-                // Adicione a classe CSS personalizada ao input
-                document
-                  .querySelector("#swal2-input")
-                  .classList.add("remove-input-border");
-              },
-              customClass: {
-                validationMessage: "custom-icon-validation", // Aplica a classe CSS personalizada ao ícone
-              },
-            });
-            break;
-          case 400:
-            Toast.fire({
-              icon: "error",
-              title: `${data.message}`,
-            });
-            break;
-          default:
-            Toast.fire({
-              icon: "error",
-              title: `${data}`,
-            });
-            break;
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        Toast.fire({
-          icon: "error",
-          title: "Erro ao enviar dados: " + error,
-        });
-      });
+  paragrafos.forEach(function (elemento) {
+    if (elemento.textContent.length > limiteCaracteres) {
+      var textoLimitado = elemento.textContent.substring(0, limiteCaracteres);
+      elemento.textContent = textoLimitado + "...";
+    }
   });
 }
 
-inicializarMercadoPago();
-inicializarMercadoPagoPIX();
-data_qrcode();
+cardElements.forEach((card) => {
+  toggleCard(card);
+});

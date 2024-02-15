@@ -70,8 +70,7 @@ const Toast = Swal.mixin({
     }
   })
 
-function enviarDados() {
-    
+function enviarDados() { // Adicionar ao Carrinho
     const button = document.querySelector('#add-cart'),
         CSRFToken = document.querySelector('input[name="csrfmiddlewaretoken').value,
         idProduct = document.querySelector('#idproduct').value;
@@ -121,5 +120,44 @@ function enviarDados() {
           });
     })
 }
+
+function fazer_compra() {
+    const button = document.querySelector('#buy'),
+        CSRFToken = document.querySelector('input[name="csrfmiddlewaretoken').value,
+        idProduct = document.querySelector('#idproduct').value;
+
+        button.addEventListener('click', () => {
+            const options = {
+                method: "POST", // Método HTTP que você deseja usar (neste caso, POST)
+                headers: {
+                "Content-Type": "application/json", // Tipo de conteúdo sendo enviado (JSON neste exemplo)
+                "X-CSRFToken": CSRFToken,
+                },
+                body: JSON.stringify({"qtd": 1, "idProduct": idProduct}), // Converte os dados para JSON e os coloca no corpo da requisição
+            };
+            fetch('/cart/getcart', options)
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error(
+                    Toast.fire({
+                        icon: 'error',
+                        title: `Erro na requisição: ${response.status}`
+                    })
+                    );
+                }
+                return response.json(); // Converte a resposta JSON em um objeto JavaScript (se a resposta for JSON)
+              })
+              .then(data => {
+                window.location.href = '/cart/';
+              })
+              .catch(error => {
+                console.error(Toast.fire({
+                    icon: 'error',
+                    title: 'Error: ' +error.message
+                  }));
+              });
+        })
+}
+fazer_compra()
 enviarDados()
 parcelas();

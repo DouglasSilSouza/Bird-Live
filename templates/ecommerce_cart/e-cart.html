@@ -13,8 +13,8 @@
 
 <section class="section">
   <section class="resume">
-      {% if carrinho %}
-          {% for cart in carrinho %}
+      {% if items %}
+          {% for cart in items %}
               <div class="resumecontainer" id="product-{{cart.produto_id}}">
                   <figure>
                       <img src="{{cart.image_url}}" alt="{{cart.title}}" class="book-img">
@@ -48,13 +48,18 @@
                     <button class="btn-trash" id="{{cart.produto_id}}"><i class="bi bi-trash3" style="color: #FFF;"></i></button>                           
               </div>
           {% endfor %}
+          <input type="hidden" id="cartid" value="{{cart.id}}">
+          {% csrf_token %}
   </section>
   <section class="resume-total">
       <span class="title">Total: </span>
       <span class="total" id="total"></span>
       <input type="hidden" id="valortotal" value="">
     </section>
-    <a href="{% url 'payment' %}" class="check_button"><button class="checkout" id="checkout">Checkout</button></a>
+    <button class="check_button" type="button" id="checkout"><span class="spinerCheckout">Checkout</span>
+        <span class="spinner-border spinner-border-sm oculto" aria-hidden="true"></span>
+        <span class="spinerstatus oculto" role="status">Aguarde...</span>
+    </button>
   {% else %}
   <h2 class="empty">No momento não possui nenhum produto!</h2>
   <span id="remove_cart" class="material-symbols-outlined">remove_shopping_cart</span>

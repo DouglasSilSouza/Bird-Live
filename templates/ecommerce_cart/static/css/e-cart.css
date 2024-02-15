@@ -164,12 +164,10 @@
 }
 
 .check_button {
+  margin: auto;
   display: flex;
   justify-content: center;
   text-decoration: none;
-}
-
-.check_button .checkout {
   width: 50%;
   padding: 10px 15px;
   background-color: var(--color-5);
@@ -179,8 +177,12 @@
   transition: opacity 1s ease;
 }
 
-.check_button .checkout:hover {
+.check_button:hover {
   opacity: .7;
+}
+
+.oculto{
+  display: none;
 }
 
 @media screen and (max-width: 822px) {

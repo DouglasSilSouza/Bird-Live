@@ -58,7 +58,7 @@
         </div>
         <div class="buttons">
             <button class="cart" id="add-cart" {% if not user.is_authenticated %} disabled {% endif %}>ADD ao Carrinho <span class="material-symbols-outlined">add_shopping_cart</span></button>
-            <a href="#"><button class="buy">Comprar</span></button></a>
+            <a {% if not user.is_authenticated %} href="{% url 'login_view' %}" {% endif %}><button id="buy" class="buy">Comprar</span></button></a>
         </div>
     </div>
 </section>

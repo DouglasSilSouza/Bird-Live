@@ -55,6 +55,7 @@ function filtros() {
   product.forEach(item => {
     const btnPrice = item.querySelector('.btnPrice');
     const valorNumerico = parseFloat(btnPrice.textContent.replace("R$ ", "").replace(",", "."));
+    
 
     maisCem.addEventListener('click', () => {
       if (valorNumerico <= 100) {
@@ -80,6 +81,10 @@ function filtros() {
   });
 }
 
-filtros();
+const filter = document.querySelector('.filters');
+if (filter && window.getComputedStyle(filter).display !== 'none') {
+  filtros();
+}
+
 navBar();
 countCart();

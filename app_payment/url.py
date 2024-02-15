@@ -2,12 +2,15 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('payment/', payment, name='payment'),
-    path('process_payment/', process_payment, name='process_payment'),
-    path('process_payment_pix/', process_payment_pix, name='process_payment_pix'),
-    path('notifications_payments/', notifications_payments, name= 'notifications_payments'),
-    path('endpoints_api/', endpoints_api, name='endpoints_api'),
-    path('dados_ausentes', dados_ausentes, name='dados_ausentes'),
-    path('verificar_dados_ausentes/', verificar_dados_ausentes, name='verificar_dados_ausentes'),
-    path('pagamento_concluido/', pagamento_feito, name='pagamento_feito'),
+    path('', imprimir, name='notification'),
+    path('/pix', imprimirPix, name='imprimirPix'),
+    path('/pay', page_payments, name='payment'),
+    path('/pay_pix', criar_pagamento_pix, name='pay_pix'),
+    path('/pay_cartao', criar_pagamento_cartao, name="pay_cartao"),
+    path("/conclusao_pagamento_cartao", conclusao_pagamento_cartao, name="conclusao_pagamento_cartao"),
+    path('/conf_conta', enviar_conf_conta, name="conf_conta"),
+    path('/flag', flagscard, name='flag'),
+    path('/listando', listando, name='listando'),
+    path('/notificacaopagamentos', notificacaoCobrancas, name="notificacaopagamentos"),
+    path('/pagamentoconcluido/<int:charge_id>', pagamento_concluido, name='pagamentoconcluido'),
 ]

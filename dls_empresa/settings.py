@@ -1,8 +1,8 @@
 from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
-from .variaveis import get_secret
-variavel = get_secret()
+from app_payment.gerencianet.variaveis import GetSecret
+variavel = GetSecret().get_secret()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,9 +18,8 @@ DEBUG = variavel['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['*']
 #ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
-SECURE_SSL_REDIRECT = False
 
-#CSRF_TRUSTED_ORIGINS = [f'https://{host}']
+CSRF_TRUSTED_ORIGINS = [f'https://bird-live-ewe.ngrok-free.app']
 
 # Application definition
 
@@ -31,15 +30,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sslserver',
     'widget_tweaks',
     'app_authentication',
+    'app_main',
     'app_payment',
     'ecommerce_cart',
     'ecommerce_main',
 ]
 
 ASGI_APPLICATION = 'dls_empresa.asgi.application'
-
 
 CHANNEL_LAYERS = {
     'default': {
@@ -91,35 +91,35 @@ MESSAGE_TAGS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES={
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": variavel["NAME"],
-        "USER": variavel["USER"],
-        "PASSWORD": variavel["PASSWORD"],
-        "HOST": variavel["HOST"],
-        "PORT": variavel["PORT"],
-        "OPTIONS": {
-            'sql_mode': 'STRICT_ALL_TABLES',
-            'charset': 'utf8mb4',
-        },
-    }
-}
-
 # DATABASES={
 #     "default": {
 #         "ENGINE": "django.db.backends.mysql",
-#         "NAME": 'dls_empresa',
-#         "USER": 'root',
-#         "PASSWORD": '',
-#         "HOST": 'localhost',
-#         "PORT": '3306',
+#         "NAME": variavel["NAME"],
+#         "USER": variavel["USER"],
+#         "PASSWORD": variavel["PASSWORD"],
+#         "HOST": variavel["HOST"],
+#         "PORT": variavel["PORT"],
 #         "OPTIONS": {
 #             'sql_mode': 'STRICT_ALL_TABLES',
 #             'charset': 'utf8mb4',
 #         },
 #     }
 # }
+
+DATABASES={
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": 'dls_empresa',
+        "USER": 'root',
+        "PASSWORD": '',
+        "HOST": 'localhost',
+        "PORT": '3306',
+        "OPTIONS": {
+            'sql_mode': 'STRICT_ALL_TABLES',
+            'charset': 'utf8mb4',
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -192,3 +192,5 @@ EMAIL_PORT = 587
 
 THOUSAND_SEPARATOR='.',
 USE_THOUSAND_SEPARATOR=True
+
+APPEND_SLASH=False

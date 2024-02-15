@@ -73,6 +73,7 @@ function adicionarEventos(container) {
     qtd++;
     qtdText.textContent = qtd;
     atualizarBadge("plus", 1);
+    atualizarQuantidade(container);
     atualizarTotalGeral();
   });
 
@@ -83,9 +84,27 @@ function adicionarEventos(container) {
       qtd--;
       qtdText.textContent = qtd;
       atualizarBadge("dash", 1);
+      atualizarQuantidade(container);
       atualizarTotalGeral();
     }
   });
+}
+
+function atualizarQuantidade(container) {
+  let qtdText = container.querySelector(".quantity");
+  let qtd = parseInt(qtdText.textContent);
+  const idProdutoText = container.id;
+  let idProduct = idProdutoText.split("product-")[1];
+
+  fetch("/cart/atualizar_quantidade/", {
+    method: "POST",
+    body: JSON.stringify({ idProduto: idProduct, qtd: qtd }),
+  })
+    .then((response) => response.json())
+    .then((data) => {})
+    .catch((error) => {
+      console.error(error.message);
+    });
 }
 
 function removeProductCart() {
@@ -94,8 +113,8 @@ function removeProductCart() {
   buttons.forEach((button) => {
     button.addEventListener("click", (e) => {
       const idElement = button.id, // Obtém o ID do botão clicado
-            section = document.querySelector(`#product-${idElement}`), // Seleciona a seção com o ID correspondente
-            badge = document.querySelector("#badge");
+        section = document.querySelector(`#product-${idElement}`), // Seleciona a seção com o ID correspondente
+        badge = document.querySelector("#badge");
 
       Swal.fire({
         title: "Deseja retirar esse produto do carrinho?",
@@ -108,10 +127,10 @@ function removeProductCart() {
         if (result.isConfirmed) {
           Swal.fire("Produto retirado!", "success");
 
-          if (section, badge) {
+          if ((section, badge)) {
             const qtdRemove = section.querySelector(".quantity"),
-                  currentBadgeValue = parseInt(badge.textContent),
-                  qtdToRemove = parseInt(qtdRemove.textContent);
+              currentBadgeValue = parseInt(badge.textContent),
+              qtdToRemove = parseInt(qtdRemove.textContent);
 
             if (!isNaN(currentBadgeValue) && !isNaN(qtdToRemove)) {
               const newBadgeValue = currentBadgeValue - qtdToRemove;
@@ -128,7 +147,7 @@ function removeProductCart() {
             }
           }
 
-          fetch("/cart/deleteitem", {
+          fetch("/cart/deleteitem/", {
             method: "POST",
             body: JSON.stringify({ idProduct: idElement }),
           })
@@ -144,6 +163,39 @@ function removeProductCart() {
     });
   });
 }
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
+
+const btnCheckout = document.querySelector("#checkout"),
+  spiner = btnCheckout.querySelector('.spinner-border'),
+  spinerCheckout = btnCheckout.querySelector('.spinerCheckout'),
+  spinerLegenda = btnCheckout.querySelector('.spinerstatus');
+
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        // A página está sendo carregada do cache do navegador (pelo botão de volta)
+        spiner.classList.add('oculto');
+        spinerLegenda.classList.add('oculto');
+        spinerCheckout.classList.remove('oculto');
+    }
+});
+
+btnCheckout.addEventListener("click", () => {
+  spiner.classList.remove('oculto');
+  spinerLegenda.classList.remove('oculto');
+  spinerCheckout.classList.add('oculto');
+  window.location.href = "/payments/pay";
+});
 
 document.addEventListener("DOMContentLoaded", function () {
   // Adicione manipuladores de eventos para todos os contêineres

@@ -15,9 +15,28 @@ section h2 {
     margin: auto;
 }
 
-.total {
+.precos {
+    margin: 0 0 0 auto;
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.precos .subtotal, .precos .juros {
+    font-size: 1rem;
+    text-align: end;
+    padding-top: 5px;
+    color: rgb(164, 164, 164);
+}
+
+.precos .total {
     border-top: 1px solid grey;
     padding-top: 5px;
     text-align: end;
     font-size: 1.5rem;
+}
+
+.oculto {
+    display: none;
 }

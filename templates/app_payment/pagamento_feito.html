@@ -27,18 +27,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in pagamento.products %}
+                    {% for product in pay.products %}
                         <tr>
                             <td><img class="table-img" src="{{product.image_url}}" alt="{{product.title}}"> </td>
                             <td>{{product.title}}</td>
                             <td>{{product.quantity}}</td>
-                            <td class="currency">R$ {{product.valor_unitario}}</td>
-                            <td class="currency">R$ {{product.subtotal}}</td>
+                            <td class="currency">R$ {{product.valor_unitario|floatformat:2}}</td>
+                            <td class="currency">R$ {{product.subtotal|floatformat:2}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="total">Total: R$ {{pagamento.amount}}
+            <div class="precos">
+                <div class="subtotal">SubTotal: R$ <span>{{pay.interest_free_value}}</span></div>
+                <div class="juros">Juros: R$ <span></span></div>
+                <div class="total">Total: R$ <span>{{pay.interest_value}}</span></div>
+            </div>
+
             </div>
         
     </div>

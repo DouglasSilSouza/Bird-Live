@@ -1,14 +1,19 @@
-function formatCurrency(value) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
+const juros = document.querySelector('.juros'),
+    subtotalText = document.querySelector('.subtotal span').textContent,
+    totalText = document.querySelector('.total span').textContent;
+
+function calcularJuros() {
+    const subtotal = parseFloat(subtotalText),
+        total = parseFloat(totalText);
+
+    let calc = (subtotal - total).toFixed(2);
+    if (calc == 0) {
+        juros.classList.add('oculto')
+    } else {
+        const jurosSpan = juros.querySelector('span');
+        jurosSpan.textContent = calc
+    }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const currencies = document.querySelectorAll(".currency");
-  currencies.forEach((element) => {
-    const value = parseFloat(element.textContent.replace("R$", "").trim());
-    element.textContent = formatCurrency(value);
-  });
-});
+calcularJuros()
+

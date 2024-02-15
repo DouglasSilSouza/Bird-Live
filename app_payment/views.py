@@ -1,282 +1,225 @@
+from ssl import create_default_context
 from .login_required_message import login_required_message_and_redirect
-from ecommerce_main.products.getproducts import GetProducts
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from app_authentication.models import Cadastro
 from ecommerce_cart.models import Carrinho, ItemCarrinho
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
 from app_payment.models import Payments
-from django.urls import reverse
-from dls_empresa.variaveis import get_secret
-from datetime import datetime
+from .gerencianet.efi import Pagamento
+from django.shortcuts import render
+from django.utils import timezone
+from decimal import Decimal
 import traceback
+import dotenv
 import json
+import os
 
-variavel = get_secret()
-
-from .mercado_pago.mp import MercadoPago
-
-import mercadopago
-sdk = mercadopago.SDK(variavel["MP_TOKEN"])
-
-def status_rected_pay(data):
-    match data:
-        case 'cc_rejected_insufficient_amount':
-            text = 'Saldo insuficiente'
-        case 'cc_rejected_bad_filled_security_code':
-            text = 'Código de segurança inválido'
-        case 'cc_rejected_bad_filled_date':
-            text = 'Data de vencimento inválida'
-    return text
-
-@login_required_message_and_redirect(login_url='login_view')
-def process_payment(request):
-    if request.method == 'POST':
-        user = Cadastro.objects.filter(id=request.user.id).first()
-        if request.body:
-            try:
-                dados = json.loads(request.body)
-                mp = MercadoPago(user)
-                response = mp.criar_pagamento(dados).json()
-                print(response)
-                match response.get('payment_type_id'):
-                    case 'bank_transfer':
-                        if response.get("point_of_interaction") is None:
-                            data = {'code': int(response.get('status')), 'message': response.get('message')}
-                        else:
-                            qrcode_data  = get_qrcode(response["point_of_interaction"]["transaction_data"])
-                            data = {'data': qrcode_data , 'code': 200}
-                    case 'credit_card':                  
-                        match response.get('status'):
-                            case 'approved':
-                                data = {'code': 200,'message': 'pagamento realizado com sucesso'}
-                            case 'rejected':
-                                status_text = status_rected_pay(response.get("status_detail", None))
-                                data = {'code': 400,'message': f'Pagamento recusado pela operadora do cartão por {status_text}!'}
-            
-                payments = Payments.objects.create(
-                    id_payment = response.get('id'),
-                    user = request.user,
-                    products = dados.get('description'),
-                    date_created = response.get('date_created'),
-                    date_approved = response.get('date_approved'),
-                    date_last_updated = response.get('date_last_updated'),
-                    status_payment = response.get('status'),
-                    status_detail = response.get('status_detail'),
-                    payment_type_id = response.get('payment_type_id'),  #Tipo de pagamento
-                    payment_method_id = response.get('payment_method_id'), #Bandeira do Cartão
-                    amount = dados.get('transaction_amount'),
-                    installments = response.get('installments'),
-                )
-                payments.save()
-                return JsonResponse(data)
-            except json.JSONDecodeError as e:
-                return JsonResponse({"error": "Erro ao decodificar JSON na solicitação.", "code": 400})
-            
-            except Exception as e:
-                print(e)
-                traceback_str = traceback.format_exc()
-                print(f"Erro: {traceback_str}")
-                return JsonResponse({"error": str(e), "code": 500})
-            except:
-                return JsonResponse({"error": response.get('message'), "code": response.get('status')})
-        else:
-            return JsonResponse({"error": "Corpo da solicitação vazio.", "code": 400})
-
-@login_required_message_and_redirect(login_url='login_view')
-def process_payment_pix(request):
-    if request.method == "POST":
-        user = Cadastro.objects.filter(id=request.user.id).first()
-        try:
-            if request.body:
-                dados = json.loads(request.body)
-                
-                mp = MercadoPago(user)
-                response = mp.criar_pagamento(dados).json()
-                
-                if response.get("point_of_interaction") is None:
-                    context = {'code': int(response.get('status')), 'message': response.get('message')}
-
-                else:
-                    data = get_qrcode(response["point_of_interaction"]["transaction_data"])
-                    context = {'data': data, 'code': 200}
-                    payments = Payments.objects.create(
-                        id_payment = response.get('id'),
-                        user = request.user,
-                        date_created = response.get('date_created'),
-                        date_approved = response.get('date_approved'),
-                        date_last_updated = response.get('date_last_updated'),
-                        status_payment = response.get('status'),
-                        status_detail = response.get('status_detail'),
-                        payment_type_id = response.get('payment_type_id'),  #Tipo de pagamento
-                        payment_method_id = response.get('payment_method_id'), #Bandeira do Cartão
-                        installments = response.get('installments')
-                    )
-                    payments.save()
-
-                return JsonResponse(context, safe=False)
-        
-            else:
-                return JsonResponse({"error": "Corpo da solicitação vazio."}, status=400)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"error": "Erro ao decodificar JSON na solicitação."}, status=400)
-        except Exception as e:
-            print(e)
-            traceback_str = traceback.format_exc()
-            print(f"Erro: {traceback_str}")
-            return JsonResponse({"error": str(e)}, status=500)
-
-def get_qrcode(data):
-    try:
-        data = {
-            'qrcode_base64': data["qr_code_base64"],
-            'qrcode' : data['qr_code'],
-            'code': 200,
-        }
-    except:
-        data = {
-            'qrcode_base64':"Error",
-            'qrcode' : "Error",
-            'code': 500,
-        }
-    return data
-
-@login_required_message_and_redirect(login_url='login_view')
-def payment(request):
-    user = Cadastro.objects.filter(id=request.user.id).first()
-    cart = Carrinho.objects.get(usuario = user)
-    total = cart.calcular_total()
-
-    # Lista de campos obrigatórios
-    campos_verificar = ['first_name',
-                        'last_name',
-                        'date_birthday',
-                        'cep',
-                        'endereco',
-                        'number',
-                        'code_area',
-                        'phone',
-                        'cpf_cnpj',
-                        'type_document',
-                        ]
-
-    # Crie uma lista de campos vazios
-    campos_vazios = []
-    for campo_nome in campos_verificar:
-        valor_campo = getattr(user, campo_nome)
-        if valor_campo in (None, '', [], {}):
-            campos_vazios.append(campo_nome)
-
-    if not campos_vazios:
-        context = {"user": user, 'total': total}
-        return render(request, "app_payment/payment.html", context)
-    else:
-        request.session['dados_ausentes'] = campos_vazios
-        return redirect(reverse('dados_ausentes'))
-
-@login_required_message_and_redirect(login_url='login_view')
-def dados_ausentes(request):
-    campos_ausentes = request.session.get('dados_ausentes', None)
-    user = Cadastro.objects.filter(id=request.user.id).first()
-    context = {"user": user, "campos_ausentes": campos_ausentes}
-    return render(request, "ecommerce_authentication/e-dados_ausentes.html", context)
-
-@login_required_message_and_redirect(login_url='login_view')
-def verificar_dados_ausentes(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        missing_fields = []
-
-        # Lista de campos obrigatórios
-        required_fields = ['nome', 'sobrenome', 'birthday', 'formEndereco', 'number', 'codearea', 'phone', 'cpf_cnpj', 'type_document', 'cep', 'bairro']
-
-        for field in required_fields:
-            if field not in data or not data[field]:
-                missing_fields.append(field.replace('birthday', 'Aniverário')
-                                      .replace('number', 'Número').replace('code', 'Código de Área').replace('type_document', 'Tipo de Documento')
-                                      .replace('cpf_cnpj', 'CPF/CNPJ').replace('phone', 'Telefone').title())
-
-        if missing_fields:
-            return JsonResponse({"message": f"Campos ausentes: {', '.join(missing_fields)}", "code": 400})
-        try:
-            user = Cadastro.objects.get(id=request.user.id)
-            birthday = data.get('birthday')
-            data_formatada = datetime.strptime(birthday, "%Y-%m-%d")
-
-            user.first_name = data.get('nome')
-            user.last_name = data.get('sobrenome')
-            user.date_birthday = data_formatada
-            user.endereco = data.get('formEndereco')
-            user.number = data.get('number')
-            user.complemento = data.get('complemento')
-            user.code_area = data.get('codearea')
-            user.phone = data.get('phone')
-            user.type_document = data.get('type_document')
-            user.cpf_cnpj = int(data.get('cpf_cnpj'))
-            user.cep = int(data.get('cep'))
-            user.bairro = data.get('bairro')
-
-            user.save()
-            del request.session['dados_ausentes']  # Limpar a sessão após obter os dados
-            return JsonResponse({"message": "Clique em 'OK' para ser direcionado á página de pagamentos.","code": 200})
-        except Exception as e:
-            print(e)
-            traceback_str = traceback.format_exc()
-            print(f"Erro: {traceback_str}")
-            return JsonResponse({"message": str(e)}, status=500)
-    else:
-        return JsonResponse({"message": "Erro Interno", "code": 500}, status=500)
-
-@login_required_message_and_redirect(login_url='login_view')
-def endpoints_api(request):
-    user = Cadastro.objects.filter(id=request.user.id).first()
-    cart = Carrinho.objects.get(usuario = user)
-    total = cart.calcular_total()
-    infoProdutos = cart.get_itens()
-    
-    try:
-        data = {
-            "public_key": variavel["MP_PUBLIC_KEY"],
-            "total": total,
-            "infoProdutos": infoProdutos
-        }
-    except Exception as e:
-            print(e)
-            traceback_str = traceback.format_exc()
-            print(f"Erro: {traceback_str}")
-    return JsonResponse(data)
+dotenv.load_dotenv()
 
 @csrf_exempt
-def notifications_payments(request):
-    if request.method == 'GET':
-        topic = request.GET.get('topic')
-        id = request.GET.get('id')
-
-        print(request.body)
-
-        if topic and id:
-            return HttpResponse(topic, id, content_type='text/plain', status=200)
-    elif request.method == 'POST':
-        print(request)
-        print(json.loads(request.body))
+def imprimir(request):
+    if request.method == "POST":
         return HttpResponse(status=200)
 
-    else:
-        return HttpResponse(status=500)
-
-@login_required_message_and_redirect(login_url='login_view')
-def pagamento_feito(request):
-    user = Cadastro.objects.get(pk=request.user.id)
+@login_required_message_and_redirect(login_url="login_view")
+@csrf_exempt
+def enviar_conf_conta(request):
     try:
-        cart = Carrinho.objects.get(usuario=user)
-        itens_cart = ItemCarrinho.objects.filter(carrinho=cart)
-        itens_cart.delete()
-        cart.delete()
-    except:
-        pass
+        count = os.getenv("IDENT_CONTA")
+        transform = {"count": count}
+        return JsonResponse(transform)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"Error": e})
 
-    pagamento = Payments.objects.filter(user=user).order_by('-date_created').first()
-    context = {"pagamento": pagamento}
+@csrf_exempt
+def imprimirPix(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            txid = data['pix'][0]['txid']
+            pagamentos = Pagamento().pix_detail(txid)
+            pay = Payments.objects.get(txid_pix=txid)
+            pay.status_detail = pagamentos['status']
+            pay.save()
 
-    return render(request, 'app_payment/pagamento_feito.html', context)
+            with open("data.txt", "a") as outfile:
+                outfile.write("\n")
+                json.dump(data, outfile)
+            return HttpResponse(status=200)
+        except Exception as e:
+            error_message = str(e)
+            traceback.print_exc()
+            print(f"Erro no código principal: {e}")
+            print(error_message)
+            return JsonResponse({"erro": error_message}, safe=False, status=404)
 
+@csrf_exempt
+def notificacaoCobrancas(request):
+    notification = request.POST.get('notification')
+    pagamentos = Pagamento()
+    get_notification = pagamentos.get_notification_cobranca(notification)
+    return HttpResponse(status=200)
+
+@login_required_message_and_redirect(login_url="login_view")
+def flagscard(request):
+    body = json.loads(request.body)
+    if request.method == "POST":
+        try:
+            with open("app_payment/bandeiras_cartao.json", "r") as arquivo:
+                dados = json.load(arquivo)
+
+            try:
+                brand = body.get("bandeira").capitalize()
+                flag = dados.get(brand)
+                return JsonResponse({"flag": flag})
+            except Exception as e:
+                return JsonResponse({'msg': "Erro ao encontrar a bandeira do cartão"})
+        except Exception as e:
+            print(e)
+            return JsonResponse({"error": f"Erro ao enviar os dados: {e}"})
+
+@login_required_message_and_redirect(login_url="login_view")
+def page_payments(request):
+    user = request.user
+    carrinho = Carrinho.objects.get(usuario=user)
+    items = ItemCarrinho.objects.filter(carrinho=carrinho)
+    context = {
+        "dados": user,
+        "items": items,
+        "cart": carrinho,
+    }
+    return render(request, "app_payment/payment.html", context)
+
+@login_required_message_and_redirect(login_url="login_view")
+def criar_pagamento_pix(request):
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            cartid = body.get('cartid')
+            pagamento = Pagamento(int(cartid))
+            try:
+                creat = pagamento.creat_pay_pix()
+                responses = creat.get("loc").get("id")
+                qrcode = pagamento.creat_qrcode_pix(responses)
+                dados = json.dumps(qrcode)
+
+                itens = Carrinho.objects.get(usuario=request.user).get_itens()
+                pay = Payments.objects.create(
+                    txid_pix = creat['txid'],
+                    user = request.user,
+                    products = itens,
+                    date_created = creat['calendario']['criacao'],
+                    id_payment = creat['loc']['id'],
+                    interest_free_value = creat['valor']['original'],
+                    status_payment = "pix",
+                    status_detail = creat['status']
+                )
+                return JsonResponse(dados, safe=False)
+            except Exception as e:
+                error_message = str(e)
+                traceback.print_exc()
+                print(error_message)
+                return JsonResponse({"erro": error_message}, safe=False, status=404)
+        except Exception as e:
+            error_message = str(e)
+            traceback.print_exc()
+            print(error_message)
+            return JsonResponse({"erro": error_message}, safe=False, status=404)
+        
+@login_required_message_and_redirect(login_url="login_view")
+def criar_pagamento_cartao(request):
+    body = json.loads(request.body)
+    if request.method == "POST":
+        cartID = body.get('carrinhoid')
+        try:
+            itens = Carrinho.objects.get(usuario=request.user).get_itens()
+            pagamento = Pagamento(int(cartID))
+            cartao = pagamento.creat_pay_cartao()
+            if cartao.get('code') == 200:
+                date_now = timezone.now()
+                date = date_now.strftime('%Y-%m-%dT%H:%M:%SZ')
+                pay, created = Payments.objects.get_or_create(
+                    id_payment = cartao['data']['charge_id'],
+                    defaults= {
+                        "user": request.user,
+                        "status_detail" : cartao['data']['status'],
+                        "interest_free_value" : Decimal(cartao['data']['total']) / 100 ,
+                        "date_created" : cartao['data']['created_at'],
+                        "user": request.user,
+                        "products": itens,
+                        "date_created": date,
+                    }
+                )
+                return JsonResponse({"charge_id": pay.id_payment}, safe=False, status=200)
+            else:
+                try:
+                    traceback.print_exc()
+                    return JsonResponse({"erro": cartao.get('error_description').get('message')}, safe=False, status=404)
+                except:
+                    traceback.print_exc()
+                    return JsonResponse({"erro": cartao.get('error_description')}, safe=False, status=404)
+        except Exception as e:
+            error_message = str(e)
+            traceback.print_exc()
+            print(error_message)
+            return JsonResponse({"erro": error_message}, safe=False, status=404)
+
+@login_required_message_and_redirect(login_url="login_view")
+def conclusao_pagamento_cartao(request):
+    body = json.loads(request.body)
+    if request.method == "POST":
+        cartID = body.get('carrinhoid')
+        parcela = body.get('parcela')
+        token = body.get('token')
+        charge_id = body.get('charge_id')
+        try:
+            pagamento = Pagamento(cartID)
+            cartao = pagamento.complete_payment_card(parcela, token, charge_id)
+            if cartao.get('code') == 200:
+                try:
+                    pay, created = Payments.objects.get_or_create(id_payment=charge_id, defaults= {
+                        "installments": cartao['data']['installments'],
+                        "installments_value": Decimal(cartao['data']['installment_value']) / 100,
+                        "status_detail": cartao['data']['status'],
+                        "interest_value": Decimal(cartao['data']['total']) / 100,
+                        "status_payment": cartao['data']['payment'],
+                        }
+                    )
+                    if cartao['data']['status'] == "approved":
+                        date_now = timezone.now()
+                        date = date_now.strftime('%Y-%m-%dT%H:%M:%SZ')
+                        pay.date_approved = date
+
+                    print(f"{cartao} Erro cartão")
+                    return JsonResponse(cartao, safe=False, status=200)
+                except Payments.DoesNotExist:
+                    traceback.print_exc()
+                    print("Objeto não encontrado")
+                    return JsonResponse({"erro":"Objeto não encontrado"}, safe=False, status=404)
+                except Exception as e:
+                    error_message = str(e)
+                    traceback.print_exc()
+                    print("Erro de execução")
+                    print(error_message)
+                    return JsonResponse({"erro": error_message}, safe=False, status=404)
+            else:
+                print(f"Outro código erro: {cartao}", type(cartao))
+                return JsonResponse(cartao, safe=False, status=404)
+        except Exception as e:
+            error_message = str(e)
+            traceback.print_exc()
+            print(f"Erro no código principal: {e}")
+            print(error_message)
+            return JsonResponse({"erro": error_message}, safe=False, status=404)
+
+@login_required_message_and_redirect(login_url="login_view")
+def pagamento_concluido(request, charge_id):
+    pay = Payments.objects.get(id_payment=charge_id)
+    return render(request, "app_payment/pagamento_feito.html", {"pay": pay})
+
+@login_required_message_and_redirect(login_url="login_view")
+def listando(request):
+    pagamento = Pagamento(18)
+    action = pagamento.list_webhook()
+    print(action)
+    return HttpResponse(pagamento)

@@ -36,7 +36,7 @@ class Cadastro(AbstractUser):
         db_table = 'cadastro'
     
     def __str__(self):
-        return self.email
+        return f"{self.first_name} {self.last_name}"
     
     def is_activation_token_valid(self):
         if self.activation_token_created_at:
