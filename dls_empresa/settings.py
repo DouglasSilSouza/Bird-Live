@@ -103,35 +103,35 @@ MESSAGE_TAGS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES={
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": variavel["NAME"],
-#         "USER": variavel["USER"],
-#         "PASSWORD": variavel["PASSWORD"],
-#         "HOST": variavel["HOST"],
-#         "PORT": variavel["PORT"],
-#         "OPTIONS": {
-#             'sql_mode': 'STRICT_ALL_TABLES',
-#             'charset': 'utf8mb4',
-#         },
-#     }
-# }
-
 DATABASES={
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": 'dls_empresa',
-        "USER": 'root',
-        "PASSWORD": '',
-        "HOST": 'localhost',
-        "PORT": '3306',
+        "NAME": variavel["NAME"],
+        "USER": variavel["USER"],
+        "PASSWORD": variavel["PASSWORD"],
+        "HOST": variavel["HOST"],
+        "PORT": variavel["PORT"],
         "OPTIONS": {
             'sql_mode': 'STRICT_ALL_TABLES',
             'charset': 'utf8mb4',
         },
     }
 }
+
+# DATABASES={
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": 'dls_empresa',
+#         "USER": 'root',
+#         "PASSWORD": '',
+#         "HOST": 'localhost',
+#         "PORT": '3306',
+#         "OPTIONS": {
+#             'sql_mode': 'STRICT_ALL_TABLES',
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
