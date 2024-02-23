@@ -1,3 +1,8 @@
+const pixModal = Swal.mixin({
+  title: "Realize o pagamento via PIX",
+  text: "Escaneie ou copie o código abaixo.",
+});
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -61,15 +66,13 @@ export function payPix(opendivpix, closedivpix) {
   };
   fetch("/payments/pay_pix", options)
     .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          Toast.fire({
-            icon: "error",
-            title: `Erro na requisição: ${response.status}`,
-          })
-        );
-      }
-      return response.json();
+      return response.json().then((data) => {
+        if (!response.ok) {
+          const errorMessage = data.error_description || "Erro desconhecido";
+          throw new Error(errorMessage);
+        }
+        return data;
+      });
     })
     .then((data) => {
       // Fecha a modal de carregamento
@@ -86,35 +89,34 @@ export function payPix(opendivpix, closedivpix) {
       let inputvalue = dados.qrcode;
 
       // Exibe a modal do SweetAlert2 com os dados
-      Swal.fire({
-        title: "Realize o pagamento via PIX",
-        text: "Escaneie ou copie o código abaixo.",
-        imageUrl: imageUrl,
-        imageWidth: 250,
-        imageHeight: 250,
-        imageAlt: "QR Code PIX",
-        input: "text",
-        inputValue: inputvalue,
-        inputAttributes: {
-          readonly: true,
-        },
-        html: '<button id="copyButton" class="swal2-confirm swal2-styled">Copiar</button><p id="copyMessage"></p>',
-        showConfirmButton: false,
-        didOpen: () => {
-          document
-            .querySelector("#copyButton")
-            .addEventListener("click", () => {
-              navigator.clipboard.writeText(inputvalue);
-              document.querySelector("#copyMessage").textContent = "Copiado!";
-              document.querySelector("#copyMessage").style.color = "green";
-            });
-        },
-      }).then((result) => {
-        if (Swal.getCloseButton(result.dismiss)) {
-          closedivpix.classList.remove("oculto");
-          opendivpix.classList.add("oculto");
-        }
-      });
+      pixModal.fire({
+          imageUrl: imageUrl,
+          imageWidth: 250,
+          imageHeight: 250,
+          imageAlt: "QR Code PIX",
+          input: "text",
+          inputValue: inputvalue,
+          inputAttributes: {
+            readonly: true,
+          },
+          html: '<button id="copyButton" class="swal2-confirm swal2-styled">Copiar</button><p id="copyMessage"></p>',
+          showConfirmButton: false,
+          didOpen: () => {
+            document
+              .querySelector("#copyButton")
+              .addEventListener("click", () => {
+                navigator.clipboard.writeText(inputvalue);
+                document.querySelector("#copyMessage").textContent = "Copiado!";
+                document.querySelector("#copyMessage").style.color = "green";
+              });
+          },
+        })
+        .then((result) => {
+          if (Swal.getCloseButton(result.dismiss)) {
+            closedivpix.classList.remove("oculto");
+            opendivpix.classList.add("oculto");
+          }
+        });
     })
     .catch((error) => {
       // Fecha a modal de carregamento em caso de erro
@@ -128,3 +130,58 @@ export function payPix(opendivpix, closedivpix) {
     });
 }
 
+function pagamentoConcluido(status, txid_status) {
+  let tempoRestante = 10;
+  console.log("Pagamento concluido")
+  if (status === "CONCLUIDA") {
+    pixModal.fire({
+      icon: "success",
+      title: "Pagamento realizado com sucesso",
+      html: `<p>Agora você será redireconado para a página de confirmação de compra.</p><br><p>Tempo restante: <span id="tempoRestante">${tempoRestante}</span> segundos</p>`,
+      allowOutsideClick: false, // Impede que o usuário feche clicando fora da modal
+      showConfirmButton: false, // Não mostra botão de confirmação
+      didOpen: () => {
+        const interval = setInterval(() => {
+          tempoRestante--;
+          document.getElementById("tempoRestante").textContent = tempoRestante;
+
+          // Verifica se o tempo acabou
+          if (tempoRestante <= 0) {
+            clearInterval(interval);
+
+            window.location.href = "/payments/pagamentoconcluido/"+txid_status;
+          }
+        }, 1000); // Atualiza a cada segundo
+      },
+    });
+  } else {
+    pixModal.update({
+      icon: "warning",
+      title: "Houve um erro inesperado",
+      text: "Não esperavamos outro Status, por favor tente novamente mais tarde",
+    });
+  }
+}
+
+const socket = new WebSocket(
+  "wss://" + window.location.host + "/wss/notifications/"
+);
+
+socket.onopen = function(e) {
+  console.log("Aberto: "+e)
+}
+
+socket.onmessage = function (event) {
+  const data = JSON.parse(event.data);
+  pagamentoConcluido(data.status, data.txid_status);
+  console.log("Dados recebido")
+  console.log(data)
+};
+
+socket.onerror = function (erro) {
+  console.error(erro);
+};
+
+socket.onclose = function () {
+  console.log("Socket Fechado");
+};

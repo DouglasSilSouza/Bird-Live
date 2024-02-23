@@ -1,0 +1,36 @@
+{% extends 'ecommerce_main/e-base.html' %}
+{% load static %}
+
+{% block e-css %}{% static 'app_payment/static/css/pagamento_feito.css' %}{% endblock %}
+
+{% block e-title %}Pagamento{% endblock %}
+
+{% block e-outers %}
+
+{% endblock %}
+
+{% block e-container %}
+<button class="btn btn-success" id="testWebSocketButton">Enviar Notificação WebSocket</button>
+{% endblock %}
+
+{% block e-scripts %}
+<script>
+    document.getElementById('testWebSocketButton').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/payments/test_websocket_notification/', {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                
+            } else {
+                alert('Erro ao enviar notificação WebSocket.    Else');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao enviar notificação WebSocket. Cath');
+        }
+    });
+</script>
+{% endblock %}

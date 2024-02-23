@@ -17,13 +17,15 @@ SECRET_KEY =  variavel["SECRET_KEY"]
 DEBUG = variavel['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['*']
-#ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com']
+#ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com', 'bird-live-ewe.ngrok-free.app']
 
 CSRF_TRUSTED_ORIGINS = [f'https://bird-live-ewe.ngrok-free.app']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +58,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 ROOT_URLCONF = 'dls_empresa.urls'
 

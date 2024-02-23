@@ -7,7 +7,7 @@ from django.db.models import Sum
 # Create your views here.
 def home(request):
     user = Cadastro.objects.count()
-    pays = Payments.objects.aggregate(soma=Sum('amount'))['soma']
+    pays = Payments.objects.aggregate(soma=Sum('interest_free_value'))['soma']
     context = {
         "users": user,
         "pays": pays
@@ -29,3 +29,11 @@ def admin_payments(request, id):
         "pay": pay
     }
     return render(request, "app_main/admin_payment.html", context=context)
+
+def usuarios(request):
+    users = Cadastro.objects.all()
+    return render(request, "app_main/usuarios.html", {"users": users})
+
+def only_usuario(request, id):
+    user = Cadastro.objects.get(pk=id)
+    return render(request, "app_main/only_usuario.html", {"user": user})

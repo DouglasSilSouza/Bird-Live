@@ -5,6 +5,8 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from app_authentication.models import Cadastro
 from decimal import Decimal
+from channels.db import database_sync_to_async
+
 
 class Carrinho(models.Model):
     usuario = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='carrinho')
@@ -14,11 +16,12 @@ class Carrinho(models.Model):
         db_table = 'e-cart'
     
     def __str__(self) -> str:
-        return self.usuario.first_name
+        return f"{self.usuario.first_name} {self.usuario.last_name}"
 
     def enviar_payment(self):
         return self.itens.aggregate(total=models.Sum('subtotal'))['total'] or 0
     
+    @database_sync_to_async
     def get_itens(self):
         itens = self.itens.all()
 

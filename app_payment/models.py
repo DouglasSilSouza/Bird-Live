@@ -1,11 +1,10 @@
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from app_authentication.models import Cadastro
 
 # Create your models here.
 class Payments(models.Model):
     id_payment = models.IntegerField(unique=True, blank=False) #Id da cobrança (ou charge_id) / Ou loc para PIX
-    txid_pix = models.CharField(max_length=40, null=True, blank=True, unique=True)
+    txid_payment_token = models.CharField(max_length=40, null=True, blank=True, unique=True)
     user = models.ForeignKey(Cadastro, on_delete=models.DO_NOTHING) #Model do Usuario
     products = models.JSONField(null=True, blank=True) # JSON dos prodtudos
     date_created = models.DateTimeField(null=True, blank=True) # Data da Criação da Cobrança
@@ -27,10 +26,9 @@ class Payments(models.Model):
 
     def date_last_updatedBR(self):
         return self.date_last_updated.strftime('%d/%m/%Y %H:%M:%S')
-    
     class Meta:
         db_table = 'payments'
-        unique_together = ('id_payment', 'txid_pix')
+        unique_together = ('id_payment', 'txid_payment_token')
     
     def __str__(self) -> str:
         return str(self.id_payment)

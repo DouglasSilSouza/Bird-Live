@@ -32,8 +32,8 @@
                 <td>{{pay.user.cpf_cnpj}}</td>
                 <td>{{pay.date_created|date:'d/m/Y'}}</td>
                 <td>{{pay.status_detail}}</td>
-                <td>{{pay.payment_method_id|capfirst}}</td>
-                <td>R$ {{pay.amount|floatformat:2}}</td>
+                <td>{{pay.status_payment|capfirst}}</td>
+                <td>R$ {{pay.interest_free_value|floatformat:2}}</td>
             </tr>
             {% endfor %}
         </tbody>

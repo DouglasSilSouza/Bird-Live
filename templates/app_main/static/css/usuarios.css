@@ -1,0 +1,26 @@
+.container {
+    background-color: var(--sidebar-color);
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-evenly;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px #00000056;
+    outline: none;
+    box-sizing: border-box;
+    border-bottom: none;
+    padding: 15px;
+}
+
+#usuarios_wrapper{
+    width: 100%;
+    color: var(--text-title);
+}
+
+.container #usuarios_wrapper th {
+    color: var(--text-title);
+}
+
+.container #usuarios_wrapper td{
+    color: var(--text-color);
+}

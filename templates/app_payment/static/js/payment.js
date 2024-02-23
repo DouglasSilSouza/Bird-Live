@@ -38,7 +38,6 @@ function toggleCard(element) {
 
         case "bodycartao":
           limitarCaracteres(targetElement);
-          enviarProdutos()
           const cardNumber = document.querySelector("#cardnumber");         
           cardNumber.addEventListener('input', async function() {
             if (cardNumber.value.replace(/\s/g, "") >= 16){

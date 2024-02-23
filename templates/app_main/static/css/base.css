@@ -260,6 +260,7 @@ body.dark{
   left: 260px;
   width: calc(100% - 260px);
   transition: all 0.5s ease;
+  height: 100vh;
 }
 .sidebar.close ~ .home-section{
   left: 78px;

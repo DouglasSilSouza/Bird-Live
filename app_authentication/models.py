@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
+from django.utils.text import slugify
 from django.db import models
 from django.utils import timezone
 
@@ -28,9 +29,11 @@ class Cadastro(AbstractUser):
     activation_token = models.CharField(max_length=32, blank=True, null=True)
     activation_token_created_at = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True,null=True, blank=True, allow_unicode=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
 
     class Meta:
         db_table = 'cadastro'
@@ -44,3 +47,7 @@ class Cadastro(AbstractUser):
             return timezone.now() <= expiration_time
         return False
     
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(f"{self.first_name} {self.last_name}")
+        return super().save(*args, **kwargs)

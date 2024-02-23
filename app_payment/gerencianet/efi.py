@@ -1,6 +1,7 @@
+from ecommerce_cart.models import Carrinho, ItemCarrinho
+from channels.db import database_sync_to_async
 from efipay import EfiPay
 from .variaveis import GetSecret
-from ecommerce_cart.models import Carrinho, ItemCarrinho
 from .get_endereco import endereco
 from datetime import datetime
 from decimal import Decimal
@@ -9,35 +10,54 @@ import re
 
 variavel = GetSecret.get_secret()
 
-credentials = {
-    'client_id': variavel['CLIENT_ID'],
-    'client_secret': variavel['CLIENT_SECRET'],
-    'sandbox': True,
-    'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\homologacao-547180-teste_cert.pem"
-}
+def is_sandbox(requisito):
+    if requisito:
+        credentials = {
+            'client_id': variavel['CLIENT_ID'],
+            'client_secret': variavel['CLIENT_SECRET'],
+            'sandbox': True,
+            'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\homologacao-547180-teste_cert.pem"
+        }
 
-# credentials = {
-#     'client_id': 'Client_Id_80f7735a77a3dae4bbbe11a5b8aa3ee7617608db',
-#     'client_secret': 'Client_Secret_341537cf57c5769897203e3a0628b810ee2c02b2',
-#     'sandbox': False,
-#     'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\producao-547180-Bird-Live_cert.pem"
-# }
+    else:
+        credentials = {
+            'client_id': 'Client_Id_80f7735a77a3dae4bbbe11a5b8aa3ee7617608db',
+            'client_secret': 'Client_Secret_341537cf57c5769897203e3a0628b810ee2c02b2',
+            'sandbox': False,
+            'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\producao-547180-Bird-Live_cert.pem"
+        }
+    
+    return credentials
 
+sandbox = is_sandbox(False)
 
-efi = EfiPay(credentials)
+efi = EfiPay(sandbox)
 
 class Pagamento:
-    def __init__(self, CartID = None) -> None:
+    def __init__(self, CartID=None):
         self.CartID = CartID
-        if self.CartID:
-            self.cart = Carrinho.objects.get(pk=self.CartID)
-            self.items = ItemCarrinho.objects.filter(carrinho=self.cart)
-            self.user = self.cart.usuario
-        else:
-            self.cart = None
-            self.items = None
-            self.user = None
+        self.cart = None
+        self.items = None
+        self.user = None
 
+    @database_sync_to_async
+    def get_cart(self):
+        return Carrinho.objects.get(pk=self.CartID)
+    
+    @database_sync_to_async
+    def get_user(self):
+        return self.cart.usuario
+    
+    @database_sync_to_async
+    def get_items(self):
+        return ItemCarrinho.objects.filter(carrinho=self.cart)
+
+    async def initialize(self):
+        self.cart = await self.get_cart()
+        self.items = await self.get_items()
+        self.user = await self.get_user()
+
+    @database_sync_to_async
     def creat_pay_pix(self):
         user = self.user
         body = {
@@ -72,6 +92,7 @@ class Pagamento:
         response = efi.pix_detail_charge(params=params)
         return response
 
+    @database_sync_to_async
     def creat_pay_cartao(self):
         items = self.items.values_list('title', 'quantidade', 'valor_unitario')
         itens = []
@@ -95,9 +116,10 @@ class Pagamento:
         response = efi.create_charge(body=body)
         return response        
 
-    def complete_payment_card(self, parcela, token, id):
-        pegar_endereco = endereco(self.user.cep)
+    @database_sync_to_async
+    def complete_payment_card(self, parcela, token, id, erropayment):
         user = self.user
+        pegar_endereco = endereco(user.cep)
 
         padrao_phone = re.compile(r'^[1-9]{2}9?[0-9]{8}$')
         usuario = (user.phone).replace(" ","")
@@ -132,7 +154,10 @@ class Pagamento:
                     }
                 }
             }
-            response = efi.define_pay_method(params=params,body=body)
+            if erropayment == 'true':
+                response = efi.retry_payment(params=params,body=body)
+            else:
+                response = efi.define_pay_method(params=params,body=body)
         except Exception as e:
             response = str(e)
             traceback.print_exc()

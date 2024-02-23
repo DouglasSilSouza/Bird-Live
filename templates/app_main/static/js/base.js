@@ -17,11 +17,35 @@ sidebarBtn.addEventListener("click", ()=>{
     sidebar.classList.toggle("close");
 });
 
-modeSwitch.addEventListener("click" , () =>{
+function saveThemePreference(isDarkMode) {
+    localStorage.setItem("themePreference", isDarkMode ? "dark" : "light");
+  }
+  
+  function applyThemePreference() {
+    const themePreference = localStorage.getItem("themePreference");
+  
+    if (themePreference) {
+      body.classList.add(themePreference);
+  
+      if (themePreference === "dark") {
+        modeText.innerText = "Modo claro";
+      } else {
+        modeText.innerText = "Modo escuro";
+      }
+    }
+  }
+  
+  applyThemePreference();
+  
+  modeSwitch.addEventListener("click", () => {
     body.classList.toggle("dark");
-        if(body.classList.contains("dark")){
-            modeText.innerText = "Light mode";
-        }else{
-            modeText.innerText = "Dark mode";
-        }
-});
+  
+    const isDarkMode = body.classList.contains("dark");
+    saveThemePreference(isDarkMode);
+  
+    if (isDarkMode) {
+      modeText.innerText = "Modo claro";
+    } else {
+      modeText.innerText = "Modo escuro";
+    }
+  });
