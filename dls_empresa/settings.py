@@ -115,6 +115,7 @@ DATABASES={
         "OPTIONS": {
             'sql_mode': 'STRICT_ALL_TABLES',
             'charset': 'utf8mb4',
+            "init_command": "SET innodb_strict_mode=1",
         },
     }
 }
