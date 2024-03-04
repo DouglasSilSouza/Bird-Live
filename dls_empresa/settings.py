@@ -17,7 +17,7 @@ SECRET_KEY =  variavel["SECRET_KEY"]
 DEBUG = variavel['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['*']
-#ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com', 'bird-live-ewe.ngrok-free.app']
+# ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com', 'bird-live-ewe.ngrok-free.app']
 
 CSRF_TRUSTED_ORIGINS = [f'https://bird-live-ewe.ngrok-free.app']
 
