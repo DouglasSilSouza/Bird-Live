@@ -15,7 +15,7 @@ sandbox = {
             'client_id': getenv('CLIENT_ID'),
             'client_secret': getenv('CLIENT_SECET'),
             'sandbox': True,
-            'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\homologacao-547180-teste_cert.pem"
+            'certificate': r".\homologacao-547180-teste_cert.pem"
         }
 
 efi = EfiPay(sandbox)
