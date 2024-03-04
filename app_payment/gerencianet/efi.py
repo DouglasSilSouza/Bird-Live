@@ -1,18 +1,19 @@
 from ecommerce_cart.models import Carrinho, ItemCarrinho
 from channels.db import database_sync_to_async
 from efipay import EfiPay
-from .variaveis import GetSecret
 from .get_endereco import endereco
 from datetime import datetime
 from decimal import Decimal
 import traceback
 import re
+from os import getenv
+import dotenv
 
-variavel = GetSecret.get_secret()
+dotenv.load_dotenv()
 
 sandbox = {
-            'client_id': variavel['CLIENT_ID'],
-            'client_secret': variavel['CLIENT_SECRET'],
+            'client_id': getenv('CLIENT_ID'),
+            'client_secret': getenv('CLIENT_SECET'),
             'sandbox': True,
             'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\homologacao-547180-teste_cert.pem"
         }

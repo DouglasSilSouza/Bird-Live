@@ -1,8 +1,9 @@
 from django.contrib.messages import constants as messages
 from pathlib import Path
 import os
-from app_payment.gerencianet.variaveis import GetSecret
-variavel = GetSecret().get_secret()
+import dotenv
+
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,10 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =  variavel["SECRET_KEY"]
+SECRET_KEY =  os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = variavel['DJANGO_DEBUG']
+DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'bird-live.cbemsi222wm9.us-east-2.rds.amazonaws.com', 'bird-live-ewe.ngrok-free.app']
@@ -105,15 +106,14 @@ MESSAGE_TAGS = {
 
 DATABASES={
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": variavel["NAME"],
-        "USER": variavel["USER"],
-        "PASSWORD": variavel["PASSWORD"],
-        "HOST": variavel["HOST"],
-        "PORT": variavel["PORT"],
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("PGDATABASE"),
+        "USER": os.getenv("PGUSER"),
+        "PASSWORD": os.getenv("PGPASSWORD"),
+        "HOST": os.getenv("PGHOST"),
+        "PORT": os.getenv("PGPORT", 5432),
         "OPTIONS": {
-            'sql_mode': 'STRICT_ALL_TABLES',
-            'charset': 'utf8mb4',
+            'sslmode': 'require',
         },
     }
 }
@@ -197,8 +197,8 @@ AUTH_USER_MODEL = 'app_authentication.Cadastro'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = variavel["ENVIOS_EMAIL"]
-EMAIL_HOST_PASSWORD = variavel["SENHA_GOOGLE"]
+EMAIL_HOST_USER = os.getenv("ENVIOS_EMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("SENHA_GOOGLE")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
