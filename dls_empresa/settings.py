@@ -111,7 +111,7 @@ DATABASES={
         "USER": os.getenv("PYUSER"),
         "PASSWORD": os.getenv("PYPASSWORD"),
         "HOST": os.getenv("PYHOST"),
-        "PORT": os.getenv("PYPORT", "3306"),
+        "PORT": "3306",
         "OPTIONS": {
             'sql_mode': 'STRICT_ALL_TABLES',
             'charset': 'utf8mb4',
