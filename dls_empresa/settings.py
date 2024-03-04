@@ -107,11 +107,11 @@ MESSAGE_TAGS = {
 DATABASES={
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("PGDATABASE"),
-        "USER": os.getenv("PGUSER"),
-        "PASSWORD": os.getenv("PGPASSWORD"),
-        "HOST": os.getenv("PGHOST"),
-        "PORT": os.getenv("PGPORT", 5432),
+        "NAME": os.getenv("PYDATABASE"),
+        "USER": os.getenv("PYUSER"),
+        "PASSWORD": os.getenv("PYPASSWORD"),
+        "HOST": os.getenv("PYHOST"),
+        "PORT": os.getenv("PYPORT", 3306),
         "OPTIONS": {
             'sslmode': 'require',
         },
