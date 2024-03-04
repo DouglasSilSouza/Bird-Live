@@ -10,26 +10,12 @@ import re
 
 variavel = GetSecret.get_secret()
 
-def is_sandbox(requisito):
-    if requisito:
-        credentials = {
+sandbox = {
             'client_id': variavel['CLIENT_ID'],
             'client_secret': variavel['CLIENT_SECRET'],
             'sandbox': True,
             'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\homologacao-547180-teste_cert.pem"
         }
-
-    else:
-        credentials = {
-            'client_id': 'Client_Id_80f7735a77a3dae4bbbe11a5b8aa3ee7617608db',
-            'client_secret': 'Client_Secret_341537cf57c5769897203e3a0628b810ee2c02b2',
-            'sandbox': False,
-            'certificate': r"C:\Users\dougl\OneDrive\Área de Trabalho\programação\requisitos efi\conversor-p12-efi-main\conversor-p12-efi-main\producao-547180-Bird-Live_cert.pem"
-        }
-    
-    return credentials
-
-sandbox = is_sandbox(False)
 
 efi = EfiPay(sandbox)
 
