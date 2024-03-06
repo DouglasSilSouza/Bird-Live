@@ -15,16 +15,17 @@ import re
 
 # Create your views here.
 async def base(request):
-    try:
-        user = await asyncio.get_event_loop().run_in_executor(None, lambda: Cadastro.objects.get(pk=request.user.id))
-        cart = await asyncio.get_event_loop().run_in_executor(None, lambda: Carrinho.objects.get(usuario=user))
-        itens = await asyncio.get_event_loop().run_in_executor(None, lambda: ItemCarrinho.objects.filter(carrinho=cart).aggregate(soma=Sum('quantidade')))
-        quantidade = itens['soma']
-        return JsonResponse({"quantity": quantidade})
-    except Carrinho.DoesNotExist:
-        return JsonResponse({"quantity": 0})
-    except Cadastro.DoesNotExist:
-        return HttpResponse(None)
+    if not request.user.is_authenticated:
+        try:
+            user = await asyncio.get_event_loop().run_in_executor(None, lambda: Cadastro.objects.get(pk=request.user.id))
+            cart = await asyncio.get_event_loop().run_in_executor(None, lambda: Carrinho.objects.get(usuario=user))
+            itens = await asyncio.get_event_loop().run_in_executor(None, lambda: ItemCarrinho.objects.filter(carrinho=cart).aggregate(soma=Sum('quantidade')))
+            quantidade = itens['soma']
+            return JsonResponse({"quantity": quantidade})
+        except Carrinho.DoesNotExist:
+            return JsonResponse({"quantity": 0})
+        except Cadastro.DoesNotExist:
+            return HttpResponse(None)
 
 def home(request):
     data = GetProducts().get_products()

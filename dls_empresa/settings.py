@@ -104,36 +104,34 @@ MESSAGE_TAGS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES={
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("PYDATABASE"),
-        "USER": os.getenv("PYUSER"),
-        "PASSWORD": os.getenv("PYPASSWORD"),
-        "HOST": os.getenv("PYHOST"),
-        "PORT": "3306",
-        "OPTIONS": {
-            'sql_mode': 'STRICT_ALL_TABLES',
-            'charset': 'utf8mb4',
-            "init_command": "SET innodb_strict_mode=1",
-        },
-    }
-}
-
 # DATABASES={
 #     "default": {
 #         "ENGINE": "django.db.backends.mysql",
-#         "NAME": 'dls_empresa',
-#         "USER": 'root',
-#         "PASSWORD": '',
-#         "HOST": 'localhost',
-#         "PORT": '3306',
+#         "NAME": f'{os.getenv("PYUSER")}${os.getenv("PYDATABASE")}',
+#         "USER": f'{os.getenv("PYUSER")}',
+#         "PASSWORD": f'{os.getenv("PYPASSWORD")}',
+#         "HOST": f'{os.getenv("PYHOST")}',
+#         "PORT": f'{os.getenv("PYPORT", "3306")}',
 #         "OPTIONS": {
-#             'sql_mode': 'STRICT_ALL_TABLES',
-#             'charset': 'utf8mb4',
+#             'charset': 'utf8mb4'
 #         },
 #     }
 # }
+
+DATABASES={
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": 'dls_empresa',
+        "USER": 'root',
+        "PASSWORD": '',
+        "HOST": 'localhost',
+        "PORT": '3306',
+        "OPTIONS": {
+            'sql_mode': 'STRICT_ALL_TABLES',
+            'charset': 'utf8mb4',
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -172,15 +170,14 @@ DEFAULT_CHARSET = 'utf-8'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/templates/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'templates')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #Location of static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates'),
     os.path.join(BASE_DIR, 'staticfiles'),
 ]
 
